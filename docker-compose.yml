@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  stable-diffusion-webui:
+    container_name: stable-diffusion-webui
+    image: stable-diffusion-webui
+    build: .
+    user: "1001:0"
+    command:
+      - --allow-code
+      - --medvram
+      - --xformers
+      - --enable-insecure-extension-access
+      - --api
+    ports:
+      - 7860:7860
+    volumes:
+      - ./data:/data
+      - ./data/scripts:/app/scripts
+      - ./data/config_states:/app/config_states
+      - cache:/.cache
+      - repositories:/app/repositories
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+
+volumes:
+  cache:
+  repositories:
