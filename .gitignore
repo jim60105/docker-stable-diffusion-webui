@@ -2,3 +2,4 @@
 !data/**/
 data/extensions/**
 !data/**/.gitkeep
+docker-compose.override.yml
