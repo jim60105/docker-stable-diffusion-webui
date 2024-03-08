@@ -4,9 +4,9 @@
 
 Yet another docker image for [AUTOMATIC1111/Stable Diffusion web UI: A web interface for Stable Diffusion, implemented using Gradio library.](https://github.com/AUTOMATIC1111/stable-diffusion-webui) from the community.
 
-The main objective behind the design of this image is to keep it small and simple, and conforms to Dockerfile best practices. With an image size of under 10GB, saving approximately 1/3 of the capacity compared to other existing repos.
+The main objective behind the design of this image is to keep it ***small and simple*** and conforms to Dockerfile best practices. Successfully controlled the size to around **10GB**, saving approximately **1/3** of the capacity compared to other existing repos.
 
-This makes it easy for me to build images seamlessly using the CI workflow on GitHub free runner. You can conveniently pull the pre-built images from ghcr, saving time instead of constructing them yourself!
+This makes it possible for me to build images seamlessly using the [CI workflow](https://github.com/jim60105/docker-stable-diffusion-webui/actions/workflows/docker_publish.yml) on GitHub free runner. You can pull the [pre-built images](https://ghcr.io/jim60105/docker-stable-diffusion-webui) from ghcr, saving time instead of constructing them yourself!
 
 Get the Dockerfile at [GitHub](https://github.com/jim60105/docker-stable-diffusion-webui), or pull the image from [ghcr.io](https://ghcr.io/jim60105/docker-stable-diffusion-webui).
 
@@ -28,11 +28,11 @@ Install an NVIDIA GPU Driver if you do not already have one installed.
 Install the NVIDIA Container Toolkit with this guide.  
 <https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html>
 
-## Usage Command
+## How to use this image
 
 Clone the repository to your local machine and navigate to the directory.  
 Then, compose up the service and wait for startup loading.  
-Access the web UI at [http://localhost:7860](http://localhost:7860). (Browser won't start automatically)
+Access the web UI at [http://localhost:7860](http://localhost:7860). (Browser won't be started automatically!)
 
 ```bash
 git clone https://github.com/jim60105/docker-stable-diffusion-webui.git
@@ -41,10 +41,10 @@ docker compose up -d
 ```
 
 > [!TIP]  
-> Models and settings will be stored at directory `./data` for default.
+> Models and settings will be stored at directory `./data` for default.  
 > Output images will be stored at directory `./data/output` for default.
 
-## Build Command
+## Build instructions
 
 > [!IMPORTANT]  
 > Clone the Git repository recursively to include submodules:  
@@ -54,38 +54,40 @@ docker compose up -d
 > If you are using an earlier version of the docker client, it is necessary to [enable the BuildKit mode](https://docs.docker.com/build/buildkit/#getting-started) when building the image. This is because I used the `COPY --link` feature which enhances the build performance and was introduced in Buildx v0.8.  
 > With the Docker Engine 23.0 and Docker Desktop 4.19, Buildx has become the default build client. So you won't have to worry about this when using the latest version.
 
+Uncomment the `# build: .` line in `docker-compose.yml` and build the image with the following command.
+
 ```bash
 docker compose up -d --build
 ```
 
 ## Migrate from existing settings
 
-1. Edit your existing `config.json` and modify all paths to be under `/data`, for example:
+1. Edit your existing `config.json` and modify all paths to be the relative path (not a path starting with / or C: for example)
 
     ```json
     {
         "outdir_samples": "",
-        "outdir_txt2img_samples": "/data/output/txt2img",
-        "outdir_img2img_samples": "/data/output/img2img",
-        "outdir_extras_samples": "/data/output/extras",
+        "outdir_txt2img_samples": "output/txt2img-images",
+        "outdir_img2img_samples": "output/img2img-images",
+        "outdir_extras_samples": "output/extras-images",
         "outdir_grids": "",
-        "outdir_txt2img_grids": "/data/output/txt2img-grids",
-        "outdir_img2img_grids": "/data/output/img2img-grids",
-        "outdir_save": "/data/output/saved",
-        "outdir_init_images": "/data/output/init-images"
+        "outdir_txt2img_grids": "output/txt2img-grids",
+        "outdir_img2img_grids": "output/img2img-grids",
+        "outdir_save": "log/images",
+        "outdir_init_images": "output/init-images",
     }
     ```
 
 2. Place `config.json` under the `data` directory.
 3. Put the models and other existing data into corresponding folders under `data`.
-4. If these files come from a Linux file system (you previously used WSL or a Linux machine), please correct the permissions of all files in the `data` folder:
+4. ***Please correct the permissions of all the files in the `data` folder*** if these files come from a Linux file system (you previously used WSL or a Linux machine):
 
     ```sh
     chown -R 1001:0 ./data && chmod -R 775 ./data
     ```
 
 > [!TIP]  
-> This image follows best practices by using a non-root user and restricting write permissions to non-essential folders. You may not be able to store files outside the `/data` path unless appropriate modifications have been made.
+> This image follows best practices by using **non-root user** and **restricting write permissions** to non-essential folders. You may not be able to store files outside the `/data` path unless appropriate modifications have been made.
 
 ## LICENSE
 
