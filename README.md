@@ -2,24 +2,30 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui/badge?style=for-the-badge)](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui) [![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/jim60105/docker-stable-diffusion-webui/scan.yml?label=IMAGE%20SCAN&style=for-the-badge)](https://github.com/jim60105/docker-stable-diffusion-webui/actions/workflows/scan.yml)
 
-This is the docker image for [AUTOMATIC1111/Stable Diffusion web UI: A web interface for Stable Diffusion, implemented using Gradio library.](https://github.com/AUTOMATIC1111/stable-diffusion-webui) from the community.
+Yet another docker image for [AUTOMATIC1111/Stable Diffusion web UI: A web interface for Stable Diffusion, implemented using Gradio library.](https://github.com/AUTOMATIC1111/stable-diffusion-webui) from the community.
 
-Get the Dockerfile at [GitHub](https://github.com/jim60105/docker-stable-diffusion-webui), or pull the image from [ghcr.io](https://ghcr.io/jim60105/docker-stable-diffusion-webui) or [quay.io](https://quay.io/repository/jim60105/docker-stable-diffusion-webui?tab=tags).
+The main objective behind the design of this image is to keep it small and simple, and conforms to Dockerfile best practices. With an image size of under 10GB, saving approximately 1/3 of the capacity compared to other existing repos.
+
+This makes it easy for me to build images seamlessly using the CI workflow on GitHub free runner. You can conveniently pull the pre-built images from ghcr, saving time instead of constructing them yourself!
+
+Get the Dockerfile at [GitHub](https://github.com/jim60105/docker-stable-diffusion-webui), or pull the image from [ghcr.io](https://ghcr.io/jim60105/docker-stable-diffusion-webui).
 
 ## Usage Command
 
-Mount the current directory as `/data` and run docker-stable-diffusion-webui with additional input arguments.  
-The downloaded files will be saved to where you run the command.
+Clone the repository to your local machine and navigate to the directory.  
+Then, compose up the service and access the web UI at [http://localhost:7860](http://localhost:7860).
 
 ```bash
-docker run -it -v ".:/data" ghcr.io/jim60105/docker-stable-diffusion-webui [options] [url]
+git clone https://github.com/jim60105/docker-stable-diffusion-webui.git
+cd docker-stable-diffusion-webui
+docker compose up -d
 ```
 
-The `[options]`, `[url]` placeholder should be replaced with the options and arguments for docker-stable-diffusion-webui. Check the [docker-stable-diffusion-webui README](https://github.com/AUTOMATIC1111/stable-diffusion-webui?tab=readme-ov-file#usage) for more information.
+> [!TIP]  
+> Models and settings will be stored at directory `./data` for default.
+> Output images will be stored at directory `./data/output` for default.
 
-You can find all available tags at [ghcr.io](https://github.com/jim60105/docker-stable-diffusion-webui/pkgs/container/docker-stable-diffusion-webui/versions?filters%5Bversion_type%5D=tagged) or [quay.io](https://quay.io/repository/jim60105/docker-stable-diffusion-webui?tab=tags).
-
-### Build Command
+## Build Command
 
 > [!IMPORTANT]  
 > Clone the Git repository recursively to include submodules:  
@@ -30,8 +36,37 @@ You can find all available tags at [ghcr.io](https://github.com/jim60105/docker-
 > With the Docker Engine 23.0 and Docker Desktop 4.19, Buildx has become the default build client. So you won't have to worry about this when using the latest version.
 
 ```bash
-docker build -f Dockerfile -t docker-stable-diffusion-webui:latest .
+docker compose up -d --build
 ```
+
+## Migrate from existing settings
+
+1. Edit your existing `config.json` and modify all paths to be under `/data`, for example:
+
+    ```json
+    {
+        "outdir_samples": "",
+        "outdir_txt2img_samples": "/data/output/txt2img",
+        "outdir_img2img_samples": "/data/output/img2img",
+        "outdir_extras_samples": "/data/output/extras",
+        "outdir_grids": "",
+        "outdir_txt2img_grids": "/data/output/txt2img-grids",
+        "outdir_img2img_grids": "/data/output/img2img-grids",
+        "outdir_save": "/data/output/saved",
+        "outdir_init_images": "/data/output/init-images"
+    }
+    ```
+
+2. Place `config.json` under the `data` directory.
+3. Put the models and other existing data into corresponding folders under `data`.
+4. If these files come from a Linux file system (you previously used WSL or a Linux machine), please correct the permissions of all files in the `data` folder:
+
+    ```sh
+    chown -R 1001:0 ./data && chmod -R 775 ./data
+    ```
+
+> [!TIP]  
+> This image follows best practices by using a non-root user and restricting write permissions to non-essential folders. You may not be able to store files outside the `/data` path unless appropriate modifications have been made.
 
 ## LICENSE
 
