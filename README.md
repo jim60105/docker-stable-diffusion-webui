@@ -1,6 +1,6 @@
 # docker-stable-diffusion-webui
 
-[![CodeFactor](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui/badge?style=for-the-badge)](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui) [![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/jim60105/docker-stable-diffusion-webui/scan.yml?label=IMAGE%20SCAN&style=for-the-badge)](https://github.com/jim60105/docker-stable-diffusion-webui/actions/workflows/scan.yml)
+[![CodeFactor](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui/badge?style=for-the-badge)](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui) ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/jim60105/docker-stable-diffusion-webui/docker_publish.yml?label=DOCKER%20BUILD&style=for-the-badge) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/jim60105/docker-stable-diffusion-webui/master?label=DATE&style=for-the-badge)
 
 Yet another docker image for [AUTOMATIC1111/Stable Diffusion web UI: A web interface for Stable Diffusion, implemented using Gradio library.](https://github.com/AUTOMATIC1111/stable-diffusion-webui) from the community.
 
@@ -10,10 +10,29 @@ This makes it easy for me to build images seamlessly using the CI workflow on Gi
 
 Get the Dockerfile at [GitHub](https://github.com/jim60105/docker-stable-diffusion-webui), or pull the image from [ghcr.io](https://ghcr.io/jim60105/docker-stable-diffusion-webui).
 
+## Get your Docker ready for GPU support
+
+### Windows
+
+Once you have installed **Docker Desktop**, **CUDA Toolkit**, **NVIDIA Windows Driver**, and ensured that your Docker is running with **WSL2**, you are ready to go.
+
+Here is the official documentation for further reference.  
+<https://docs.nvidia.com/cuda/wsl-user-guide/index.html#nvidia-compute-software-support-on-wsl-2>
+<https://docs.docker.com/desktop/wsl/use-wsl/#gpu-support>
+
+### Linux, OSX
+
+Install an NVIDIA GPU Driver if you do not already have one installed.  
+<https://docs.nvidia.com/datacenter/tesla/tesla-installation-notes/index.html>
+
+Install the NVIDIA Container Toolkit with this guide.  
+<https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html>
+
 ## Usage Command
 
 Clone the repository to your local machine and navigate to the directory.  
-Then, compose up the service and access the web UI at [http://localhost:7860](http://localhost:7860).
+Then, compose up the service and wait for startup loading.  
+Access the web UI at [http://localhost:7860](http://localhost:7860). (Browser won't start automatically)
 
 ```bash
 git clone https://github.com/jim60105/docker-stable-diffusion-webui.git
