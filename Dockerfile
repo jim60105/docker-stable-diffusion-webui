@@ -105,10 +105,8 @@ RUN install -d -m 775 -o $UID -g 0 ${CACHE_HOME} && \
     install -d -m 775 -o $UID -g 0 /app/repositories
 
 # Copy dependencies and code (and support arbitrary uid for OpenShift best practice)
-COPY --link --chown=$UID:0 --chmod=775 \
-    --from=build /root/.local /home/$UID/.local
-COPY --link --chown=$UID:0 --chmod=775 \
-    stable-diffusion-webui /app
+COPY --link --chown=$UID:0 --chmod=775 --from=build /root/.local /home/$UID/.local
+COPY --link --chown=$UID:0 --chmod=775 stable-diffusion-webui /app
 
 # Copy licenses (OpenShift Policy)
 COPY --link --chmod=775 LICENSE /licenses/Dockerfile.LICENSE
@@ -116,7 +114,7 @@ COPY --link --chmod=775 stable-diffusion-webui/LICENSE.txt /licenses/stable-diff
 COPY --link --chmod=775 stable-diffusion-webui/html/licenses.html /licenses/stable-diffusion-webui-borrowed-code.LICENSE.html
 
 ENV PATH="/home/$UID/.local/bin:$PATH"
-ENV PYTHONPATH="${PYTHONPATH}:/home/$UID/.local/lib/python3.10/site-packages" 
+ENV PYTHONPATH="${PYTHONPATH}:/home/$UID/.local/lib/python3.10/site-packages:/app"
 ENV LD_PRELOAD=libtcmalloc.so
 
 WORKDIR /data
