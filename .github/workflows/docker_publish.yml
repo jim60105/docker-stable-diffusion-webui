@@ -1,0 +1,53 @@
+name: docker_publish
+
+on:
+  push:
+    branches:
+      - "master"
+    tags:
+      - "v*"
+  schedule:
+    - cron: "0 7 1 * *" # 1st day of month at 7am UTC
+
+  workflow_dispatch:
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Checkout submodule
+        run: |
+          cd stable-diffusion-webui && \
+          git fetch --all --tags && \
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            git checkout tags/${{ github.ref_name }} -b ${{ github.ref_name }}
+          else
+            git checkout master
+          fi
+
+      - name: Setup docker
+        id: setup
+        uses: ./.github/workflows/docker-reused-setup-steps
+        with:
+          CR_PAT: ${{ secrets.CR_PAT }}
+          tag: ${{ github.head_ref || github.ref_name }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          target: final
+          tags: ${{ steps.setup.outputs.tags }}
+          labels: ${{ steps.setup.outputs.labels }}
+          build-args: VERSION=${{ github.head_ref || github.ref_name }}
+          platforms: linux/amd64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

@@ -24,7 +24,7 @@ jobs:
       - name: Run Trivy vulnerability scanner for alpine image
         uses: aquasecurity/trivy-action@0.14.0
         with:
-          image-ref: "ghcr.io/jim60105/fc2-live-dl:alpine"
+          image-ref: "ghcr.io/jim60105/stable-diffusion-webui:alpine"
           vuln-type: "os,library"
           scanners: vuln
           severity: "CRITICAL,HIGH"
@@ -35,7 +35,7 @@ jobs:
       - name: Run Trivy vulnerability scanner for ubi image
         uses: aquasecurity/trivy-action@0.14.0
         with:
-          image-ref: "ghcr.io/jim60105/fc2-live-dl:ubi"
+          image-ref: "ghcr.io/jim60105/stable-diffusion-webui:ubi"
           vuln-type: "os,library"
           scanners: vuln
           severity: "CRITICAL,HIGH"
@@ -46,7 +46,7 @@ jobs:
       - name: Run Trivy vulnerability scanner for distroless image
         uses: aquasecurity/trivy-action@0.14.0
         with:
-          image-ref: "ghcr.io/jim60105/fc2-live-dl:distroless"
+          image-ref: "ghcr.io/jim60105/stable-diffusion-webui:distroless"
           vuln-type: "os,library"
           scanners: vuln
           severity: "CRITICAL,HIGH"
