@@ -78,7 +78,9 @@ COPY --link --from=mwader/static-ffmpeg:6.1.1 /ffprobe /usr/local/bin/
 
 # Install runtime dependencies
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends libgl1 libglib2.0-0 libjpeg62 libgoogle-perftools-dev dumb-init git libglfw3-dev libgles2-mesa-dev pkg-config libcairo2 libcairo2-dev build-essential && \
+    apt-get install -y --no-install-recommends libgl1 libglib2.0-0 libjpeg62 libgoogle-perftools-dev \
+    git libglfw3-dev libgles2-mesa-dev pkg-config libcairo2 libcairo2-dev build-essential fonts-dejavu-core \
+    dumb-init && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
