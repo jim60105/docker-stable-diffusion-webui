@@ -1,0 +1,31 @@
+name: Submodule Updates
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+jobs:
+  update_submodules:
+    name: Submodule update
+    runs-on: ubuntu-latest
+    env:
+      PARENT_REPOSITORY: ${{ github.repository_owner }}/docker-stable-diffusion-webui
+      CHECKOUT_BRANCH: master
+      PR_AGAINST_BRANCH: master
+      OWNER: ${{ github.repository_owner }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Update Submodules
+        uses: releasehub-com/github-action-create-pr-parent-submodule@v1
+        continue-on-error: true
+        with:
+          github_token: ${{ secrets.CR_PAT }}
+          parent_repository: ${{ env.PARENT_REPOSITORY }}
+          checkout_branch: ${{ env.CHECKOUT_BRANCH}}
+          pr_against_branch: ${{ env.PR_AGAINST_BRANCH }}
+          owner: ${{ env.OWNER }}
+          label: "automerge"
