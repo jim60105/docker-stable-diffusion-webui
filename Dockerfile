@@ -105,7 +105,8 @@ RUN install -d -m 775 -o $UID -g 0 ${CACHE_HOME} && \
     install -d -m 775 -o $UID -g 0 /data && \
     install -d -m 775 -o $UID -g 0 /data/scripts && \
     install -d -m 775 -o $UID -g 0 /app && \
-    install -d -m 775 -o $UID -g 0 /app/repositories
+    install -d -m 775 -o $UID -g 0 /app/repositories && \
+    chown -R $UID:0 /home/$UID && chmod -R g=u /home/$UID
 
 # Copy licenses (OpenShift Policy)
 COPY --link --chmod=775 LICENSE /licenses/Dockerfile.LICENSE
