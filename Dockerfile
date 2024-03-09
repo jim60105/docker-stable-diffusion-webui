@@ -79,7 +79,7 @@ COPY --link --from=mwader/static-ffmpeg:6.1.1 /ffprobe /usr/local/bin/
 # Install runtime dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libgl1 libglib2.0-0 libjpeg62 libgoogle-perftools-dev \
-    git libglfw3-dev libgles2-mesa-dev pkg-config libcairo2 libcairo2-dev build-essential fonts-dejavu-core \
+    git libglfw3-dev libgles2-mesa-dev pkg-config libcairo2 build-essential  \
     dumb-init && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -106,14 +106,14 @@ RUN install -d -m 775 -o $UID -g 0 ${CACHE_HOME} && \
     install -d -m 775 -o $UID -g 0 /app && \
     install -d -m 775 -o $UID -g 0 /app/repositories
 
-# Copy dependencies and code (and support arbitrary uid for OpenShift best practice)
-COPY --link --chown=$UID:0 --chmod=775 --from=build /root/.local /home/$UID/.local
-COPY --link --chown=$UID:0 --chmod=775 stable-diffusion-webui /app
-
 # Copy licenses (OpenShift Policy)
 COPY --link --chmod=775 LICENSE /licenses/Dockerfile.LICENSE
 COPY --link --chmod=775 stable-diffusion-webui/LICENSE.txt /licenses/stable-diffusion-webui.LICENSE.txt
 COPY --link --chmod=775 stable-diffusion-webui/html/licenses.html /licenses/stable-diffusion-webui-borrowed-code.LICENSE.html
+
+# Copy dependencies and code (and support arbitrary uid for OpenShift best practice)
+COPY --link --chown=$UID:0 --chmod=775 --from=build /root/.local /home/$UID/.local
+COPY --link --chown=$UID:0 --chmod=775 stable-diffusion-webui /app
 
 ENV PATH="/home/$UID/.local/bin:$PATH"
 ENV PYTHONPATH="${PYTHONPATH}:/home/$UID/.local/lib/python3.10/site-packages:/app"
