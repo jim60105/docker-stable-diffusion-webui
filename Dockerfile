@@ -106,6 +106,9 @@ RUN install -d -m 775 -o $UID -g 0 ${CACHE_HOME} && \
     install -d -m 775 -o $UID -g 0 /data/scripts && \
     install -d -m 775 -o $UID -g 0 /app && \
     install -d -m 775 -o $UID -g 0 /app/repositories && \
+    # For arbitrary uid support
+    install -d -m 775 -o $UID -g 0 /.local && \
+    install -d -m 775 -o $UID -g 0 /.config && \
     chown -R $UID:0 /home/$UID && chmod -R g=u /home/$UID
 
 # Copy licenses (OpenShift Policy)
