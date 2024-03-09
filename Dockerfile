@@ -37,7 +37,7 @@ RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/r
 # Install requirements
 RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \
     --mount=source=stable-diffusion-webui/requirements_versions.txt,target=requirements.txt \
-    pip install -r requirements.txt
+    pip install -r requirements.txt clip-anytorch
 
 # Replace pillow with pillow-simd (Only for x86)
 ARG TARGETPLATFORM
@@ -79,7 +79,7 @@ COPY --link --from=mwader/static-ffmpeg:6.1.1 /ffprobe /usr/local/bin/
 # Install runtime dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libgl1 libglib2.0-0 libjpeg62 libgoogle-perftools-dev \
-    git libglfw3-dev libgles2-mesa-dev pkg-config libcairo2 build-essential  \
+    git libglfw3-dev libgles2-mesa-dev pkg-config libcairo2 build-essential \
     dumb-init && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
