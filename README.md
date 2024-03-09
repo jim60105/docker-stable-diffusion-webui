@@ -47,7 +47,7 @@ Install the NVIDIA Container Toolkit with this guide.
     (Browser won't be started automatically!)
 
 Models and settings will be stored at directory `./data`.  
-Output images will be stored at directory `./data/output` for default.
+Output images will be stored at directory `./data/outputs` for default.
 
 ## 🛠️ Build instructions
 
@@ -72,14 +72,14 @@ docker compose up -d --build
     ```json
     {
         "outdir_samples": "",
-        "outdir_txt2img_samples": "output/txt2img-images",
-        "outdir_img2img_samples": "output/img2img-images",
-        "outdir_extras_samples": "output/extras-images",
+        "outdir_txt2img_samples": "outputs/txt2img-images",
+        "outdir_img2img_samples": "outputs/img2img-images",
+        "outdir_extras_samples": "outputs/extras-images",
         "outdir_grids": "",
-        "outdir_txt2img_grids": "output/txt2img-grids",
-        "outdir_img2img_grids": "output/img2img-grids",
+        "outdir_txt2img_grids": "outputs/txt2img-grids",
+        "outdir_img2img_grids": "outputs/img2img-grids",
         "outdir_save": "log/images",
-        "outdir_init_images": "output/init-images",
+        "outdir_init_images": "outputs/init-images",
     }
     ```
 
