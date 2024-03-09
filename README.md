@@ -6,9 +6,9 @@ Yet another docker image for [AUTOMATIC1111/Stable Diffusion web UI: A web inter
 
 The main objective behind the design of this image is to keep it ***small and simple*** and conforms to Dockerfile best practices. Successfully controlled the size to around **10GB**, saving approximately **1/3** of the capacity compared to other existing repos.
 
-This makes it possible for me to build images seamlessly using the [CI workflow](https://github.com/jim60105/docker-stable-diffusion-webui/actions/workflows/docker_publish.yml) on GitHub free runner. You can pull the [pre-built images](https://ghcr.io/jim60105/docker-stable-diffusion-webui) from ghcr, saving time instead of constructing them yourself!
+This makes it possible for me to build images seamlessly using the [CI workflow](https://github.com/jim60105/docker-stable-diffusion-webui/actions/workflows/docker_publish.yml) on GitHub free runner. You can pull the [pre-built images](https://ghcr.io/jim60105/stable-diffusion-webui) from ghcr, saving time instead of constructing them yourself!
 
-Get the Dockerfile at [GitHub](https://github.com/jim60105/docker-stable-diffusion-webui), or pull the image from [ghcr.io](https://ghcr.io/jim60105/docker-stable-diffusion-webui).
+Get the Dockerfile at [GitHub](https://github.com/jim60105/docker-stable-diffusion-webui), or pull the image from [ghcr.io](https://ghcr.io/jim60105/stable-diffusion-webui).
 
 ## 🚀 Get your Docker ready for GPU support
 
@@ -119,7 +119,7 @@ You should have received a copy of the GNU Affero General Public License along w
 >
 > - Re-distribute the image. (You can simply point to this GitHub repository if you doesn't made any code changes.)
 > - Distribute a image that uses code from this repository.
-> - Or **distribute a image based on this image**. (`FROM ghcr.io/jim60105/docker-stable-diffusion-webui` in your Dockerfile)
+> - Or **distribute a image based on this image**. (`FROM ghcr.io/jim60105/stable-diffusion-webui` in your Dockerfile)
 >
 > "Distribute" means to make the image available for other people to download, usually by pushing it to a public registry. If you are solely using it for your personal purposes, this has no impact on you.
 >
