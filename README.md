@@ -10,11 +10,11 @@ This makes it possible for me to build images seamlessly using the [CI workflow]
 
 Get the Dockerfile at [GitHub](https://github.com/jim60105/docker-stable-diffusion-webui), or pull the image from [ghcr.io](https://ghcr.io/jim60105/docker-stable-diffusion-webui).
 
-## Get your Docker ready for GPU support
+## 🚀 Get your Docker ready for GPU support
 
 ### Windows
 
-Once you have installed **Docker Desktop**, **CUDA Toolkit**, **NVIDIA Windows Driver**, and ensured that your Docker is running with **WSL2**, you are ready to go.
+Once you have installed [**Docker Desktop**](https://www.docker.com/products/docker-desktop/), [**CUDA Toolkit**](https://developer.nvidia.com/cuda-downloads), [**NVIDIA Windows Driver**](https://www.nvidia.com.tw/Download/index.aspx), and ensured that your Docker is running with [**WSL2**](https://docs.docker.com/desktop/wsl/#turn-on-docker-desktop-wsl-2), you are ready to go.
 
 Here is the official documentation for further reference.  
 <https://docs.nvidia.com/cuda/wsl-user-guide/index.html#nvidia-compute-software-support-on-wsl-2>
@@ -28,31 +28,32 @@ Install an NVIDIA GPU Driver if you do not already have one installed.
 Install the NVIDIA Container Toolkit with this guide.  
 <https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html>
 
-## How to use this image
+## 🖥️ How to use this image
 
-Clone the repository to your local machine and navigate to the directory.  
-Then, compose up the service and wait for startup loading.  
-Access the web UI at [http://localhost:7860](http://localhost:7860). (Browser won't be started automatically!)
+1. Clone the repository to your local machine and navigate to the directory.
 
-```bash
-git clone https://github.com/jim60105/docker-stable-diffusion-webui.git
-cd docker-stable-diffusion-webui
-docker compose up -d
-```
+    ```bash
+    git clone https://github.com/jim60105/docker-stable-diffusion-webui.git
+    cd docker-stable-diffusion-webui
+    ```
 
-> [!TIP]  
-> Models and settings will be stored at directory `./data` for default.  
-> Output images will be stored at directory `./data/output` for default.
+2. Compose up the service and wait for startup loading.
 
-## Build instructions
+    ```bash
+    docker compose up -d
+    ```
+
+3. Access the web UI at [http://localhost:7860](http://localhost:7860).  
+    (Browser won't be started automatically!)
+
+Models and settings will be stored at directory `./data`.  
+Output images will be stored at directory `./data/output` for default.
+
+## 🛠️ Build instructions
 
 > [!IMPORTANT]  
-> Clone the Git repository recursively to include submodules:  
+> Clone the Git repository ***recursively*** to include submodules:  
 > `git clone --recursive https://github.com/jim60105/docker-stable-diffusion-webui.git`
-
-> [!NOTE]  
-> If you are using an earlier version of the docker client, it is necessary to [enable the BuildKit mode](https://docs.docker.com/build/buildkit/#getting-started) when building the image. This is because I used the `COPY --link` feature which enhances the build performance and was introduced in Buildx v0.8.  
-> With the Docker Engine 23.0 and Docker Desktop 4.19, Buildx has become the default build client. So you won't have to worry about this when using the latest version.
 
 Uncomment the `# build: .` line in `docker-compose.yml` and build the image with the following command.
 
@@ -60,7 +61,11 @@ Uncomment the `# build: .` line in `docker-compose.yml` and build the image with
 docker compose up -d --build
 ```
 
-## Migrate from existing settings
+> [!NOTE]  
+> If you are using an earlier version of the docker client, it is necessary to [enable the BuildKit mode](https://docs.docker.com/build/buildkit/#getting-started) when building the image. This is because I used the `COPY --link` feature which enhances the build performance and was introduced in Buildx v0.8.  
+> With the Docker Engine 23.0 and Docker Desktop 4.19, Buildx has become the default build client. So you won't have to worry about this when using the latest version.
+
+## 🔄 Migrate from existing settings
 
 1. Edit your existing `config.json` and modify all paths to be the relative path (not a path starting with / or C: for example)
 
@@ -86,10 +91,23 @@ docker compose up -d --build
     chown -R 1001:0 ./data && chmod -R 775 ./data
     ```
 
-> [!TIP]  
+> [!NOTE]  
+> This instruction modifies the owner group of the `data` directory to ***0 (root group)*** and grants ***write permission to the group***. This aligns with OpenShift best practices to enables support for arbitrary uid.
+
+> [!WARNING]  
 > This image follows best practices by using **non-root user** and **restricting write permissions** to non-essential folders. You may not be able to store files outside the `/data` path unless appropriate modifications have been made.
 
-## LICENSE
+## 📝 LICENSE
+
+<img src="https://github.com/jim60105/docker-stable-diffusion-webui/assets/16995691/a12d2791-048f-4b8d-87f8-96c88c9ef310" alt="agplv3" width="300" />
+
+[GNU AFFERO GENERAL PUBLIC LICENSE Version 3](/LICENSE)
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 > [!NOTE]  
 > The main program, [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui), is distributed under [AGPL-3.0 license](https://github.com/AUTOMATIC1111/stable-diffusion-webui/blob/master/LICENSE.txt).  
@@ -106,13 +124,3 @@ docker compose up -d --build
 > "Distribute" means to make the image available for other people to download, usually by pushing it to a public registry. If you are solely using it for your personal purposes, this has no impact on you.
 >
 > Please consult the [LICENSE](LICENSE) for more details.
-
-<img src="https://github.com/jim60105/docker-stable-diffusion-webui/assets/16995691/a12d2791-048f-4b8d-87f8-96c88c9ef310" alt="agplv3" width="300" />
-
-[GNU AFFERO GENERAL PUBLIC LICENSE Version 3](/LICENSE)
-
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
