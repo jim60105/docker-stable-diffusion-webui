@@ -7,11 +7,22 @@ services:
     # build: .
     user: "1001:0"
     command:
+      # Already configured in the entrypoint and should remain unchanged!!
+      # --listen --port 7860 --data-dir /data --gradio-allowed-path /app
+      #
+      # Recommanded:
+      - --xformers
       - --allow-code
       - --medvram
-      - --xformers
-      - --enable-insecure-extension-access
+      - --no-half-vae
+      # You may or may not need:
       - --api
+      - --enable-insecure-extension-access
+      - --opt-sdp-attention
+      - --opt-sdp-no-mem-attention
+      - --opt-channelslast
+      # Full list:
+      # https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Command-Line-Arguments-and-Settings
     ports:
       - 7860:7860
     volumes:
