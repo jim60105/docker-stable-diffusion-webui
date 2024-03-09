@@ -2,6 +2,15 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui/badge?style=for-the-badge)](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui) ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/jim60105/docker-stable-diffusion-webui/docker_publish.yml?label=DOCKER%20BUILD&style=for-the-badge) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/jim60105/docker-stable-diffusion-webui/master?label=DATE&style=for-the-badge)
 
+<section align="center">
+  <p>
+    <a href="https://github.com/jim60105/docker-stable-diffusion-webui/blob/master/README.zh.md">
+        Chinese
+    </a>
+    <span>| English</span>
+  </p>
+</section>
+
 Yet another docker image for [AUTOMATIC1111/Stable Diffusion web UI: A web interface for Stable Diffusion, implemented using Gradio library.](https://github.com/AUTOMATIC1111/stable-diffusion-webui) from the community.
 
 The main objective behind the design of this image is to keep it ***small and simple*** and conforms to Dockerfile best practices. Successfully controlled the size to around **10GB**, saving approximately **1/3** of the capacity compared to other existing repos.
@@ -28,7 +37,7 @@ Install an NVIDIA GPU Driver if you do not already have one installed.
 Install the NVIDIA Container Toolkit with this guide.  
 <https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html>
 
-## 🖥️ How to use this image
+## 🖥️ How to use this project
 
 1. Clone the repository to your local machine and navigate to the directory.
 
@@ -55,7 +64,7 @@ Output images will be stored at directory `./data/outputs` for default.
 > Clone the Git repository ***recursively*** to include submodules:  
 > `git clone --recursive https://github.com/jim60105/docker-stable-diffusion-webui.git`
 
-Uncomment the `# build: .` line in `docker-compose.yml` and build the image with the following command.
+Uncomment [the `# build: .` line in `docker-compose.yml`](https://github.com/jim60105/docker-stable-diffusion-webui/blob/bc23c16b99034147c74ab901ae7f605d5d9fc21c/docker-compose.yml#L7) and build the image with the following command.
 
 ```bash
 docker compose up -d --build
@@ -67,7 +76,7 @@ docker compose up -d --build
 
 ## 🔄 Migrate from existing settings
 
-1. Edit your existing `config.json` and modify all paths to be the relative path (not a path starting with / or C: for example)
+1. Edit your existing `config.json` and modify all paths to be the relative path (not a path starting with / or C:), for example:
 
     ```json
     {
@@ -92,10 +101,10 @@ docker compose up -d --build
     ```
 
 > [!NOTE]  
-> This instruction modifies the owner group of the `data` directory to ***0 (root group)*** and grants ***write permission to the group***. This aligns with OpenShift best practices to enables support for arbitrary uid.
+> This instruction modifies the owner group of the `data` directory to ***0 (root group)*** and grants ***write permission to the group***. This aligns with OpenShift best practices by ***supporting arbitrary uid***.
 
 > [!WARNING]  
-> This image follows best practices by using **non-root user** and **restricting write permissions** to non-essential folders. You may not be able to store files outside the `/data` path unless appropriate modifications have been made.
+> This image follows best practices by ***using non-root user*** and ***restricting write permissions to non-essential folders***. You may not be able to store files outside the `/data` path unless appropriate modifications have been made.
 
 ## 📝 LICENSE
 
@@ -114,8 +123,8 @@ You should have received a copy of the GNU Affero General Public License along w
 > Please consult their repository for access to the source code and licenses.  
 > The following is the license for the Dockerfiles and CI workflows in this repository.
 
-> [!CAUTION]
-> An AGPLv3 licensed Dockerfile means that you _**MUST**_ **distribute the source code with the same license**, if you
+> [!CAUTION]  
+> An AGPLv3 licensed Dockerfile means that you ***MUST*** **distribute the source code with the same license**, if you
 >
 > - Re-distribute the image. (You can simply point to this GitHub repository if you doesn't made any code changes.)
 > - Distribute a image that uses code from this repository.
