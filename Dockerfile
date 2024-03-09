@@ -36,7 +36,7 @@ RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/r
 
 # Install requirements
 RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \
-    --mount=source=stable-diffusion-webui/requirements.txt,target=requirements.txt \
+    --mount=source=stable-diffusion-webui/requirements_versions.txt,target=requirements.txt \
     pip install -r requirements.txt
 
 # Replace pillow with pillow-simd (Only for x86)
