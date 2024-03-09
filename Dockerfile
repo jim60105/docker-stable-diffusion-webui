@@ -103,6 +103,7 @@ ENV HF_HOME=${HF_HOME}
 RUN install -d -m 775 -o $UID -g 0 ${CACHE_HOME} && \
     install -d -m 775 -o $UID -g 0 /licenses && \
     install -d -m 775 -o $UID -g 0 /data && \
+    install -d -m 775 -o $UID -g 0 /data/scripts && \
     install -d -m 775 -o $UID -g 0 /app && \
     install -d -m 775 -o $UID -g 0 /app/repositories
 
@@ -130,4 +131,4 @@ USER $UID
 STOPSIGNAL SIGINT
 
 # Use dumb-init as PID 1 to handle signals properly
-ENTRYPOINT [ "dumb-init", "--", "python3", "/app/launch.py", "--listen", "--port", "7860", "--data-dir", "/data", "--gradio-allowed-path", "/app" ]
+ENTRYPOINT [ "dumb-init", "--", "/bin/sh", "-c", "cp -rfs /data/scripts/ /app/scripts/ && python3 /app/launch.py --listen --port 7860 --data-dir /data --gradio-allowed-path /app \"$@\"" ]

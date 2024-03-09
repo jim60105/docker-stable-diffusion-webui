@@ -16,7 +16,6 @@ services:
       - 7860:7860
     volumes:
       - ./data:/data
-      - ./data/scripts:/app/scripts
       - ./data/config_states:/app/config_states
       - cache:/.cache
       - repositories:/app/repositories
