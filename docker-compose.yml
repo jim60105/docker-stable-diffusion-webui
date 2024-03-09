@@ -25,6 +25,8 @@ services:
       # https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Command-Line-Arguments-and-Settings
     ports:
       - 7860:7860
+    tmpfs:
+      - /tmp
     volumes:
       - ./data:/data
       - ./data/config_states:/app/config_states
