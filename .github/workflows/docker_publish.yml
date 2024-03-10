@@ -24,11 +24,12 @@ jobs:
       - name: Checkout submodule
         run: |
           cd stable-diffusion-webui && \
-          git fetch --all --tags && \
           if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            git fetch --all --tags && \
             git checkout tags/${{ github.ref_name }} -b ${{ github.ref_name }}
           else
-            git checkout dev
+            git fetch origin +refs/heads/*:refs/remotes/origin/* -v && \
+            git checkout -b dev origin/dev
           fi
 
       - name: Setup docker
