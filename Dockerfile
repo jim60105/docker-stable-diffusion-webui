@@ -51,24 +51,6 @@ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
 
 FROM python:3.10-slim as final
 
-ARG UID
-ARG VERSION
-ARG RELEASE
-
-LABEL name="jim60105/docker-stable-diffusion-webui" \
-    # Author for stable-diffusion-webui
-    vendor="AUTOMATIC1111" \
-    # Dockerfile maintainer
-    maintainer="jim60105" \
-    # Dockerfile source repository
-    url="https://github.com/jim60105/docker-stable-diffusion-webui" \
-    version=${VERSION} \
-    # This should be a number, incremented with each change
-    release=${RELEASE} \
-    io.k8s.display-name="stable-diffusion-webui" \
-    summary="Stable Diffusion web UI: A web interface for Stable Diffusion, implemented using Gradio library." \
-    description="Stable Diffusion web UI: A web interface for Stable Diffusion, implemented using Gradio library. This is the docker image for AUTOMATIC1111's stable-diffusion-webui. For more information about this tool, please visit the following website: https://github.com/AUTOMATIC1111/stable-diffusion-webui."
-
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
 
@@ -89,6 +71,7 @@ RUN ln -s /usr/lib/x86_64-linux-gnu/libnvinfer.so /usr/lib/x86_64-linux-gnu/libn
     ln -s /usr/lib/x86_64-linux-gnu/libnvinfer_plugin.so /usr/lib/x86_64-linux-gnu/libnvinfer_plugin.so.7
 
 # Create user
+ARG UID
 RUN groupadd -g $UID $UID && \
     useradd -l -u $UID -g $UID -m -s /bin/sh -N $UID
 
@@ -136,3 +119,19 @@ STOPSIGNAL SIGINT
 
 # Use dumb-init as PID 1 to handle signals properly
 ENTRYPOINT [ "dumb-init", "--", "/bin/sh", "-c", "cp -rfs /data/scripts/ /app/scripts/ && python3 /app/launch.py --listen --port 7860 --data-dir /data \"$@\"", "--" ]
+
+ARG VERSION
+ARG RELEASE
+LABEL name="jim60105/docker-stable-diffusion-webui" \
+    # Author for stable-diffusion-webui
+    vendor="AUTOMATIC1111" \
+    # Dockerfile maintainer
+    maintainer="jim60105" \
+    # Dockerfile source repository
+    url="https://github.com/jim60105/docker-stable-diffusion-webui" \
+    version=${VERSION} \
+    # This should be a number, incremented with each change
+    release=${RELEASE} \
+    io.k8s.display-name="stable-diffusion-webui" \
+    summary="Stable Diffusion web UI: A web interface for Stable Diffusion, implemented using Gradio library." \
+    description="Stable Diffusion web UI: A web interface for Stable Diffusion, implemented using Gradio library. This is the docker image for AUTOMATIC1111's stable-diffusion-webui. For more information about this tool, please visit the following website: https://github.com/AUTOMATIC1111/stable-diffusion-webui."
