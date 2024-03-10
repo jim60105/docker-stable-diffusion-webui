@@ -43,8 +43,8 @@ runs:
         images: ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui
         tags: |
           dev,enable=${{ inputs.tag == 'master' }}
+          latest,enable=${{ inputs.tag == 'master' }}
           ${{ inputs.tag }},enable=${{ inputs.tag != 'master' }}
-          type=raw,value=latest,enable=${{ inputs.tag == 'dev' }}
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
