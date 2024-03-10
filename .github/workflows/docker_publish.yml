@@ -27,9 +27,11 @@ jobs:
           if [[ "${{ github.ref }}" == refs/tags/* ]]; then
             git fetch --all --tags && \
             git checkout tags/${{ github.ref_name }} -b ${{ github.ref_name }}
+            echo "VERSION=${{ github.ref_name }}" >> "$GITHUB_ENV"
           else
             git fetch origin +refs/heads/*:refs/remotes/origin/* -v && \
-            git checkout -b dev origin/dev
+            git checkout -b dev origin/dev;
+            echo "VERSION=dev" >> "$GITHUB_ENV";
           fi
 
       - name: Setup docker
@@ -48,7 +50,7 @@ jobs:
           target: final
           tags: ${{ steps.setup.outputs.tags }}
           labels: ${{ steps.setup.outputs.labels }}
-          build-args: VERSION=${{ github.head_ref || github.ref_name }}
+          build-args: VERSION=${{ env.VERSION }}
           platforms: linux/amd64
           cache-from: type=gha
           cache-to: type=gha,mode=max
