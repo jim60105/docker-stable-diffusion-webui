@@ -7,7 +7,7 @@ on:
     tags:
       - "v*"
   schedule:
-    - cron: "0 7 1 * *" # 1st day of month at 7am UTC
+    - cron: "0 7 * * 0" # 1st day of month at 7am UTC
 
   workflow_dispatch:
 
@@ -28,7 +28,7 @@ jobs:
           if [[ "${{ github.ref }}" == refs/tags/* ]]; then
             git checkout tags/${{ github.ref_name }} -b ${{ github.ref_name }}
           else
-            git checkout master
+            git checkout dev
           fi
 
       - name: Setup docker
