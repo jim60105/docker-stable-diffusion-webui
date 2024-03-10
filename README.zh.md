@@ -1,10 +1,10 @@
 # docker-stable-diffusion-webui
 
-[![CodeFactor](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui/badge?style=for-the-badge)](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui) ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/jim60105/docker-stable-diffusion-webui/docker_publish.yml?label=DOCKER%20BUILD&style=for-the-badge) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/jim60105/docker-stable-diffusion-webui/master?label=DATE&style=for-the-badge)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/jim60105/docker-stable-diffusion-webui/docker_publish.yml?label=DOCKER%20BUILD&style=for-the-badge) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/jim60105/docker-stable-diffusion-webui/master?label=DATE&style=for-the-badge)
 
 <section align="center">
   <p>
-    <span>Chinese</span> |
+    <span>中文</span> |
     <a href="https://github.com/jim60105/docker-stable-diffusion-webui/blob/master/README.md">
       English
     </a>
@@ -133,3 +133,5 @@ You should have received a copy of the GNU Affero General Public License along w
 > "發佈"意味著使該映像可供其他人下載，通常是將其推送到公開倉庫。 若僅用於個人目的，這部份不會對你產生影響。
 >
 > 有關詳細信息，請參閱 [LICENSE](LICENSE)。
+
+[![CodeFactor](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui/badge)](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui) [![DeepSource](https://app.deepsource.com/gh/jim60105/docker-stable-diffusion-webui.svg/?label=active+issues&show_trend=false&token=1VuQPvmy4vSxN83egASazDLW)](https://app.deepsource.com/gh/jim60105/docker-stable-diffusion-webui/)
