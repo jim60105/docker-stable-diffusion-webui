@@ -8,7 +8,7 @@ services:
     user: "1001:0"
     command:
       # Already configured in the entrypoint and should remain unchanged!!
-      # --listen --port 7860 --data-dir /data --gradio-allowed-path /app
+      # --listen --port 7860 --data-dir /data
       #
       # Recommanded:
       - --xformers
