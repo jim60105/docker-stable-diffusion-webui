@@ -1,11 +1,11 @@
 # docker-stable-diffusion-webui
 
-[![CodeFactor](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui/badge?style=for-the-badge)](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui) ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/jim60105/docker-stable-diffusion-webui/docker_publish.yml?label=DOCKER%20BUILD&style=for-the-badge) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/jim60105/docker-stable-diffusion-webui/master?label=DATE&style=for-the-badge)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/jim60105/docker-stable-diffusion-webui/docker_publish.yml?label=DOCKER%20BUILD&style=for-the-badge) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/jim60105/docker-stable-diffusion-webui/master?label=DATE&style=for-the-badge)
 
 <section align="center">
   <p>
     <a href="https://github.com/jim60105/docker-stable-diffusion-webui/blob/master/README.zh.md">
-        Chinese
+        中文
     </a>
     <span>| English</span>
   </p>
@@ -133,3 +133,5 @@ You should have received a copy of the GNU Affero General Public License along w
 > "Distribute" means to make the image available for other people to download, usually by pushing it to a public registry. If you are solely using it for your personal purposes, this has no impact on you.
 >
 > Please consult the [LICENSE](LICENSE) for more details.
+
+[![DeepSource](https://app.deepsource.com/gh/jim60105/docker-stable-diffusion-webui.svg/?label=active+issues&show_trend=false&token=1VuQPvmy4vSxN83egASazDLW)](https://app.deepsource.com/gh/jim60105/docker-stable-diffusion-webui/) [![CodeFactor](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui/badge)](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui)
