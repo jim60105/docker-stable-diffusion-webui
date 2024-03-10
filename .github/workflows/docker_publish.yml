@@ -50,7 +50,9 @@ jobs:
           target: final
           tags: ${{ steps.setup.outputs.tags }}
           labels: ${{ steps.setup.outputs.labels }}
-          build-args: VERSION=${{ env.VERSION }}
+          build-args: |
+            VERSION=${{ env.VERSION }}
+            RELEASE=${{ github.run_number }}
           platforms: linux/amd64
           cache-from: type=gha
           cache-to: type=gha,mode=max
