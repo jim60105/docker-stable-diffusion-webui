@@ -1,8 +1,7 @@
 # docker-stable-diffusion-webui
 
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/jim60105/docker-stable-diffusion-webui/docker_publish.yml?label=DOCKER%20BUILD&style=for-the-badge) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/jim60105/docker-stable-diffusion-webui/master?label=DATE&style=for-the-badge)
-
 <section align="center">
+  <img src="https://github.com/jim60105/docker-stable-diffusion-webui/assets/16995691/de246026-c7b5-474e-bade-89905aa5b010"/>
   <p>
     <span>中文</span> |
     <a href="https://github.com/jim60105/docker-stable-diffusion-webui/blob/master/README.md">
@@ -10,6 +9,8 @@
     </a>
   </p>
 </section>
+
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/jim60105/docker-stable-diffusion-webui/docker_publish.yml?label=DOCKER%20BUILD&style=for-the-badge) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/jim60105/docker-stable-diffusion-webui/master?label=DATE&style=for-the-badge)
 
 又一個來自社群的 [AUTOMATIC1111/Stable Diffusion web UI](https://github.com/AUTOMATIC1111/stable-diffusion-webui) Docker 映像。
 
