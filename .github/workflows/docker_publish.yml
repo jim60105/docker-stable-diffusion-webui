@@ -12,8 +12,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  docker:
+  docker-tag:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
 
     steps:
       - name: Checkout
@@ -24,15 +25,8 @@ jobs:
       - name: Checkout submodule
         run: |
           cd stable-diffusion-webui && \
-          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
-            git fetch --all --tags && \
-            git checkout tags/${{ github.ref_name }} -b ${{ github.ref_name }}
-            echo "VERSION=${{ github.ref_name }}" >> "$GITHUB_ENV"
-          else
-            git fetch origin +refs/heads/*:refs/remotes/origin/* -v && \
-            git checkout -b dev origin/dev;
-            echo "VERSION=dev" >> "$GITHUB_ENV";
-          fi
+          git fetch --all --tags && \
+          git checkout tags/${{ github.ref_name }} -b ${{ github.ref_name }}
 
       - name: Setup docker
         id: setup
@@ -51,7 +45,86 @@ jobs:
           tags: ${{ steps.setup.outputs.tags }}
           labels: ${{ steps.setup.outputs.labels }}
           build-args: |
-            VERSION=${{ env.VERSION }}
+            VERSION=${{ github.ref_name }}
+            RELEASE=${{ github.run_number }}
+          platforms: linux/amd64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  docker-dev:
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master'))
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Checkout submodule
+        run: |
+          cd stable-diffusion-webui && \
+          git fetch origin +refs/heads/*:refs/remotes/origin/* -v && \
+          git checkout -b dev origin/dev;
+
+      - name: Setup docker
+        id: setup
+        uses: ./.github/workflows/docker-reused-setup-steps
+        with:
+          CR_PAT: ${{ secrets.CR_PAT }}
+          tag: ${{ github.head_ref || github.ref_name }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          target: final
+          tags: ${{ steps.setup.outputs.tags }}
+          labels: ${{ steps.setup.outputs.labels }}
+          build-args: |
+            VERSION=dev
+            RELEASE=${{ github.run_number }}
+          platforms: linux/amd64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  docker-forge:
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master'))
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Checkout submodule
+        run: |
+          cd stable-diffusion-webui && \
+          git remote add forge https://github.com/lllyasviel/stable-diffusion-webui-forge && \
+          git fetch forge +refs/heads/*:refs/remotes/forge/* -v && \
+          git checkout -b main forge/main;
+
+      - name: Setup docker
+        id: setup
+        uses: ./.github/workflows/docker-reused-setup-steps
+        with:
+          CR_PAT: ${{ secrets.CR_PAT }}
+          tag: ${{ github.head_ref || github.ref_name }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          target: final
+          tags: ${{ steps.setup.outputs.tags }}
+          labels: ${{ steps.setup.outputs.labels }}
+          build-args: |
+            VERSION=forge
             RELEASE=${{ github.run_number }}
           platforms: linux/amd64
           cache-from: type=gha

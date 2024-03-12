@@ -3,6 +3,7 @@ version: "3.9"
 services:
   stable-diffusion-webui:
     container_name: stable-diffusion-webui
+    # image: ghcr.io/jim60105/stable-diffusion-webui:forge
     image: ghcr.io/jim60105/stable-diffusion-webui:v1.8.0
     # build: .
     user: "1001:0"
