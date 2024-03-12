@@ -77,19 +77,19 @@ docker compose up -d --build
 
 ## 🔄 從現有的設定檔遷移
 
-1. 編輯你現有的 `config.json`，將所有路徑修改為相對路徑(不是以 / 或 C: 開頭的路徑)，舉例來說：
+1. 編輯你現有的 `config.json`，將所有路徑修改為在 `/data` 之下，舉例來說：
 
    ```json
    {
        "outdir_samples": "",
-       "outdir_txt2img_samples": "outputs/txt2img-images",
-       "outdir_img2img_samples": "outputs/img2img-images",
-       "outdir_extras_samples": "outputs/extras-images",
+       "outdir_txt2img_samples": "/data/output/txt2img-images",
+       "outdir_img2img_samples": "/data/output/img2img-images",
+       "outdir_extras_samples": "/data/output/extras-images",
        "outdir_grids": "",
-       "outdir_txt2img_grids": "outputs/txt2img-grids",
-       "outdir_img2img_grids": "outputs/img2img-grids",
-       "outdir_save": "log/images",
-       "outdir_init_images": "outputs/init-images",
+       "outdir_txt2img_grids": "/data/output/txt2img-grids",
+       "outdir_img2img_grids": "/data/output/img2img-grids",
+       "outdir_save": "/data/log/images",
+       "outdir_init_images": "/data/output/init-images",
    }
    ```
 

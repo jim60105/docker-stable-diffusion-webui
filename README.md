@@ -77,19 +77,19 @@ docker compose up -d --build
 
 ## 🔄 Migrate from existing settings
 
-1. Edit your existing `config.json` and modify all paths to be the relative path (not a path starting with / or C:), for example:
+1. Edit your existing `config.json` and modify all paths to be under `/data`, for example:
 
     ```json
     {
         "outdir_samples": "",
-        "outdir_txt2img_samples": "outputs/txt2img-images",
-        "outdir_img2img_samples": "outputs/img2img-images",
-        "outdir_extras_samples": "outputs/extras-images",
+        "outdir_txt2img_samples": "/data/output/txt2img-images",
+        "outdir_img2img_samples": "/data/output/img2img-images",
+        "outdir_extras_samples": "/data/output/extras-images",
         "outdir_grids": "",
-        "outdir_txt2img_grids": "outputs/txt2img-grids",
-        "outdir_img2img_grids": "outputs/img2img-grids",
-        "outdir_save": "log/images",
-        "outdir_init_images": "outputs/init-images",
+        "outdir_txt2img_grids": "/data/output/txt2img-grids",
+        "outdir_img2img_grids": "/data/output/img2img-grids",
+        "outdir_save": "/data/log/images",
+        "outdir_init_images": "/data/output/init-images",
     }
     ```
 
