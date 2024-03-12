@@ -33,7 +33,7 @@ jobs:
         uses: ./.github/workflows/docker-reused-setup-steps
         with:
           CR_PAT: ${{ secrets.CR_PAT }}
-          tag: ${{ github.head_ref || github.ref_name }}
+          tag: ${{ github.ref_name }}
 
       - name: Build and push
         uses: docker/build-push-action@v5
@@ -72,7 +72,7 @@ jobs:
         uses: ./.github/workflows/docker-reused-setup-steps
         with:
           CR_PAT: ${{ secrets.CR_PAT }}
-          tag: ${{ github.head_ref || github.ref_name }}
+          tag: dev
 
       - name: Build and push
         uses: docker/build-push-action@v5
@@ -112,7 +112,7 @@ jobs:
         uses: ./.github/workflows/docker-reused-setup-steps
         with:
           CR_PAT: ${{ secrets.CR_PAT }}
-          tag: ${{ github.head_ref || github.ref_name }}
+          tag: forge
 
       - name: Build and push
         uses: docker/build-push-action@v5
