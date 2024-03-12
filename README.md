@@ -57,7 +57,7 @@ Install the NVIDIA Container Toolkit with this guide.
     (Browser won't be started automatically!)
 
 Models and settings will be stored at directory `./data`.  
-Output images will be stored at directory `./data/outputs` for default.
+Output images will be stored at directory `./data/output` for default.
 
 ## 🔀 Switch between different versions/branches
 
