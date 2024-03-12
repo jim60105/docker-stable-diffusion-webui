@@ -38,7 +38,7 @@
 並按照此指南安裝 NVIDIA Container Toolkit  
 [https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
 
-## 🖥️ 如何使用這個專案
+## 🖥️ 運行專案
 
 1. 將儲存庫 clone 到本地並導航到該目錄。
 
@@ -58,6 +58,38 @@
 
 模型和設置將被儲存在目錄 `./data`  
 在預設情況下，輸出的圖片將儲存在 `./data/outputs`
+
+## 🔀 切換版本/分支
+
+### 映像標籤對應的程式版本
+
+本專案的 docker image tag 對應於 [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) 從 `v1.6.1` 起的非 RC 版本號和它的 `dev` 分支，以及 [lllyasviel/stable-diffusion-webui-forge](https://github.com/lllyasviel/stable-diffusion-webui-forge) 的 `main` 分支。
+
+| Image tag    | Code version                                                                                                                |
+|--------------|-----------------------------------------------------------------------------------------------------------------------------|
+| dev (latest) | [AUTOMATIC1111/stable-diffusion-webui dev branch](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/dev)         |
+| forge        | [lllyasviel/stable-diffusion-webui-forge main branch](https://github.com/lllyasviel/stable-diffusion-webui-forge/tree/main) |
+| v1.6.1       | [AUTOMATIC1111/stable-diffusion-webui v1.6.1 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.6.1)      |
+| v1.7.0       | [AUTOMATIC1111/stable-diffusion-webui v1.7.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.7.0)      |
+| v1.8.0       | [AUTOMATIC1111/stable-diffusion-webui v1.8.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.8.0)      |
+
+你可以在 [ghcr.io](https://github.com/jim60105/docker-stable-diffusion-webui/pkgs/container/stable-diffusion-webui) 上查看所有可用的標籤。
+
+### 修改 docker-compose.yml 中的映像標籤
+
+修改 [`docker-compose.yml` 中的 `image` 欄位](https://github.com/jim60105/docker-stable-diffusion-webui/blob/f41cfe8458a3b66d8cbdeff14284bbcd91b73959/docker-compose.yml#L7)，將 `ghcr.io/jim60105/stable-diffusion-webui` 後面的標籤改為你想要的版本。
+
+舉例來說，若你想要使用 `forge` 版本，你應該修改成:
+
+```yml
+image: ghcr.io/jim60105/stable-diffusion-webui:forge
+```
+
+然後使用以下指令重新啟動服務:
+
+```bash
+docker compose down && docker compose up -d
+```
 
 ## 🛠️ 建置指南
 

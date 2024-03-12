@@ -38,7 +38,7 @@ Install an NVIDIA GPU Driver if you do not already have one installed.
 Install the NVIDIA Container Toolkit with this guide.  
 <https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html>
 
-## 🖥️ How to use this project
+## 🖥️ Run the project
 
 1. Clone the repository to your local machine and navigate to the directory.
 
@@ -58,6 +58,38 @@ Install the NVIDIA Container Toolkit with this guide.
 
 Models and settings will be stored at directory `./data`.  
 Output images will be stored at directory `./data/outputs` for default.
+
+## 🔀 Switch between different versions/branches
+
+### Program Versions Corresponding to Image Tags
+
+The program versions of the docker image tag corresponds to the non-RC version number from `v1.6.1` and its `dev` branch in [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui), as well as the `main` branch of [lllyasviel/stable-diffusion-webui-forge](https://github.com/lllyasviel/stable-diffusion-webui-forge).
+
+| Image tag    | Code version                                                                                                                |
+|--------------|-----------------------------------------------------------------------------------------------------------------------------|
+| dev (latest) | [AUTOMATIC1111/stable-diffusion-webui dev branch](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/dev)         |
+| forge        | [lllyasviel/stable-diffusion-webui-forge main branch](https://github.com/lllyasviel/stable-diffusion-webui-forge/tree/main) |
+| v1.6.1       | [AUTOMATIC1111/stable-diffusion-webui v1.6.1 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.6.1)      |
+| v1.7.0       | [AUTOMATIC1111/stable-diffusion-webui v1.7.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.7.0)      |
+| v1.8.0       | [AUTOMATIC1111/stable-diffusion-webui v1.8.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.8.0)      |
+
+You can check all available tags on [ghcr.io](https://github.com/jim60105/docker-stable-diffusion-webui/pkgs/container/stable-diffusion-webui)
+
+### Modify the image tag in the docker-compose.yml
+
+Change the tag after `ghcr.io/jim60105/stable-diffusion-webui` in the [`image` field of `docker-compose.yml`](https://github.com/jim60105/docker-stable-diffusion-webui/blob/f41cfe8458a3b66d8cbdeff14284bbcd91b73959/docker-compose.yml#L7) to your desired version.
+
+For example, if you want to use the `forge` version, you should modify it to:
+
+```yml
+image: ghcr.io/jim60105/stable-diffusion-webui:forge
+```
+
+Then restart the service using the following command:
+
+```bash
+docker compose down && docker compose up -d
+```
 
 ## 🛠️ Build instructions
 
