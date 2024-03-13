@@ -3,11 +3,13 @@ version: "3.9"
 services:
   stable-diffusion-webui:
     container_name: stable-diffusion-webui
-    # image: ghcr.io/jim60105/stable-diffusion-webui:forge
     image: ghcr.io/jim60105/stable-diffusion-webui:v1.8.0
     # build: .
     user: "1001:0"
     command:
+      # https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Command-Line-Arguments-and-Settings
+      # https://github.com/AUTOMATIC1111/stable-diffusion-webui/blob/master/modules/cmd_args.py
+      #
       # Already configured in the entrypoint and should remain unchanged!!
       # --listen --port 7860 --data-dir /data
       #
@@ -22,8 +24,6 @@ services:
       - --opt-sdp-attention
       - --opt-sdp-no-mem-attention
       - --opt-channelslast
-      # Full list:
-      # https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Command-Line-Arguments-and-Settings
     ports:
       - 7860:7860
     tmpfs:

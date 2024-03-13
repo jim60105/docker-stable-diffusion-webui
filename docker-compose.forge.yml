@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  stable-diffusion-webui-forge:
+    extends:
+      file: docker-compose.yml
+      service: stable-diffusion-webui
+    container_name: stable-diffusion-webui-forge
+    image: ghcr.io/jim60105/stable-diffusion-webui:forge
+    command:
+      # https://github.com/lllyasviel/stable-diffusion-webui-forge/blob/main/modules/cmd_args.py
+      #
+      # Already configured in the entrypoint and should remain unchanged!!
+      # --listen --port 7860 --data-dir /data
+      #
+      # Recommanded:
+      - --xformers
+      - --allow-code
+      # You may or may not need:
+      - --api
+      - --enable-insecure-extension-access
+      - --opt-sdp-attention
+      - --opt-sdp-no-mem-attention
+      - --opt-channelslast
+      #
+      # Forge Backend
+      # !! Start this service once and check the logs. Forge will advise you on which optimization flags to add depending on your graphics card. !!
+      # https://github.com/lllyasviel/stable-diffusion-webui-forge?tab=readme-ov-file#forge-backend
+      # https://github.com/lllyasviel/stable-diffusion-webui-forge/blob/main/ldm_patched/modules/args_parser.py
+      #
+      # - --pin-shared-memory
+      # - --cuda-malloc
+      # - --cuda-stream
+
+volumes:
+  cache:
+  repositories:
