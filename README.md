@@ -61,28 +61,27 @@ Output images will be stored at directory `./data/output` for default.
 
 ## 🔀 Switch between different versions/branches
 
-### Program Versions Corresponding to Image Tags
+### Docker Image Tags
 
-The program versions of the docker image tag corresponds to the non-RC version number from `v1.6.1` and its `dev` branch in [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui), as well as the `main` branch of [lllyasviel/stable-diffusion-webui-forge](https://github.com/lllyasviel/stable-diffusion-webui-forge).
+The docker image tag corresponds to the non-RC version number from `v1.6.1` and its `dev` branch in [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui).
 
 | Image tag    | Code version                                                                                                                |
 |--------------|-----------------------------------------------------------------------------------------------------------------------------|
 | dev (latest) | [AUTOMATIC1111/stable-diffusion-webui dev branch](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/dev)         |
-| forge        | [lllyasviel/stable-diffusion-webui-forge main branch](https://github.com/lllyasviel/stable-diffusion-webui-forge/tree/main) |
 | v1.6.1       | [AUTOMATIC1111/stable-diffusion-webui v1.6.1 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.6.1)      |
 | v1.7.0       | [AUTOMATIC1111/stable-diffusion-webui v1.7.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.7.0)      |
 | v1.8.0       | [AUTOMATIC1111/stable-diffusion-webui v1.8.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.8.0)      |
 
-You can check all available tags on [ghcr.io](https://github.com/jim60105/docker-stable-diffusion-webui/pkgs/container/stable-diffusion-webui)
+You can check all available tags at [ghcr.io](https://github.com/jim60105/docker-stable-diffusion-webui/pkgs/container/stable-diffusion-webui).
 
-### Modify the image tag in the docker-compose.yml
+### Specify the image in the docker-compose.yml
 
 Change the tag after `ghcr.io/jim60105/stable-diffusion-webui` in the [`image` field of `docker-compose.yml`](https://github.com/jim60105/docker-stable-diffusion-webui/blob/f41cfe8458a3b66d8cbdeff14284bbcd91b73959/docker-compose.yml#L7) to your desired version.
 
-For example, if you want to use the `forge` version, you should modify it to:
+For example, if you want to use the `v1.7.0` version, you should modify it to:
 
 ```yml
-image: ghcr.io/jim60105/stable-diffusion-webui:forge
+image: ghcr.io/jim60105/stable-diffusion-webui:v1.7.0
 ```
 
 Then restart the service using the following command:
@@ -90,6 +89,25 @@ Then restart the service using the following command:
 ```bash
 docker compose down && docker compose up -d
 ```
+
+### Use the forge version
+
+There's a special version `forge` which is based on the `main` branch of [lllyasviel/stable-diffusion-webui-forge](https://github.com/lllyasviel/stable-diffusion-webui-forge).
+
+| Image tag | Code version                                                                                                                |
+|-----------|-----------------------------------------------------------------------------------------------------------------------------|
+| forge     | [lllyasviel/stable-diffusion-webui-forge main branch](https://github.com/lllyasviel/stable-diffusion-webui-forge/tree/main) |
+
+You can use it with the `docker-compose-forge.yml` file.
+
+```bash
+docker compose -f docker-compose-forge.yml up -d
+```
+
+> [!NOTE]  
+> Notice that they used the same port `7860`, so you can't run them at the same time.  
+> Please stop the running service before starting another one.  
+> ![image](https://github.com/jim60105/docker-stable-diffusion-webui/assets/16995691/f7aecb66-5416-4806-90d8-b6c6be6c1bad)
 
 ## 🛠️ Build instructions
 
@@ -141,6 +159,11 @@ docker compose up -d --build
 
 ## 📝 LICENSE
 
+> [!NOTE]  
+> The main program, [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui), is distributed under [AGPL-3.0 license](https://github.com/AUTOMATIC1111/stable-diffusion-webui/blob/master/LICENSE.txt).  
+> Please consult their repository for access to the source code and licenses.  
+> The following is the license for the Dockerfiles and CI workflows in this repository.
+
 <img src="https://github.com/jim60105/docker-stable-diffusion-webui/assets/16995691/a12d2791-048f-4b8d-87f8-96c88c9ef310" alt="agplv3" width="300" />
 
 [GNU AFFERO GENERAL PUBLIC LICENSE Version 3](/LICENSE)
@@ -150,11 +173,6 @@ This program is free software: you can redistribute it and/or modify it under th
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
-
-> [!NOTE]  
-> The main program, [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui), is distributed under [AGPL-3.0 license](https://github.com/AUTOMATIC1111/stable-diffusion-webui/blob/master/LICENSE.txt).  
-> Please consult their repository for access to the source code and licenses.  
-> The following is the license for the Dockerfiles and CI workflows in this repository.
 
 > [!CAUTION]  
 > An AGPLv3 licensed Dockerfile means that you ***MUST*** **distribute the source code with the same license**, if you

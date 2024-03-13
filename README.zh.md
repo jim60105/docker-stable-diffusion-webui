@@ -61,28 +61,27 @@
 
 ## 🔀 切換版本/分支
 
-### 映像標籤對應的程式版本
+### Docker Image Tags
 
-本專案的 docker image tag 對應於 [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) 從 `v1.6.1` 起的非 RC 版本號和它的 `dev` 分支，以及 [lllyasviel/stable-diffusion-webui-forge](https://github.com/lllyasviel/stable-diffusion-webui-forge) 的 `main` 分支。
+Docker image tag 對應於 [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) 從 `v1.6.1` 起的非 RC 版本號和它的 `dev` 分支。
 
 | Image tag    | Code version                                                                                                                |
 |--------------|-----------------------------------------------------------------------------------------------------------------------------|
 | dev (latest) | [AUTOMATIC1111/stable-diffusion-webui dev branch](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/dev)         |
-| forge        | [lllyasviel/stable-diffusion-webui-forge main branch](https://github.com/lllyasviel/stable-diffusion-webui-forge/tree/main) |
 | v1.6.1       | [AUTOMATIC1111/stable-diffusion-webui v1.6.1 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.6.1)      |
 | v1.7.0       | [AUTOMATIC1111/stable-diffusion-webui v1.7.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.7.0)      |
 | v1.8.0       | [AUTOMATIC1111/stable-diffusion-webui v1.8.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.8.0)      |
 
-你可以在 [ghcr.io](https://github.com/jim60105/docker-stable-diffusion-webui/pkgs/container/stable-diffusion-webui) 上查看所有可用的標籤。
+你可以在 [ghcr.io](https://github.com/jim60105/docker-stable-diffusion-webui/pkgs/container/stable-diffusion-webui) 查看所有可用的標籤。
 
-### 修改 docker-compose.yml 中的映像標籤
+### 指定 docker-compose.yml 中的映像標籤
 
 修改 [`docker-compose.yml` 中的 `image` 欄位](https://github.com/jim60105/docker-stable-diffusion-webui/blob/f41cfe8458a3b66d8cbdeff14284bbcd91b73959/docker-compose.yml#L7)，將 `ghcr.io/jim60105/stable-diffusion-webui` 後面的標籤改為你想要的版本。
 
-舉例來說，若你想要使用 `forge` 版本，你應該修改成:
+舉例來說，若你想要使用 `v1.7.0` 版本，你應該修改成:
 
 ```yml
-image: ghcr.io/jim60105/stable-diffusion-webui:forge
+image: ghcr.io/jim60105/stable-diffusion-webui:v1.7.0
 ```
 
 然後使用以下指令重新啟動服務:
@@ -90,6 +89,25 @@ image: ghcr.io/jim60105/stable-diffusion-webui:forge
 ```bash
 docker compose down && docker compose up -d
 ```
+
+### 使用 forge 版本
+
+有一個特殊版本 `forge`，它是基於 [lllyasviel/stable-diffusion-webui-forge](https://github.com/lllyasviel/stable-diffusion-webui-forge) 的 `main` 分支。
+
+| Image tag | Code version                                                                                                                |
+|-----------|-----------------------------------------------------------------------------------------------------------------------------|
+| forge     | [lllyasviel/stable-diffusion-webui-forge main branch](https://github.com/lllyasviel/stable-diffusion-webui-forge/tree/main) |
+
+請透過 `docker-compose-forge.yml` 使用它。
+
+```bash
+docker compose -f docker-compose-forge.yml up -d
+```
+
+> [!NOTE]  
+> 請注意，由於它們使用相同的埠號 `7860`，因此不能在同一時間運行。  
+> 請先停止運行中的服務再啟動另一個服務。  
+> ![image](https://github.com/jim60105/docker-stable-diffusion-webui/assets/16995691/f7aecb66-5416-4806-90d8-b6c6be6c1bad)
 
 ## 🛠️ 建置指南
 
@@ -141,6 +159,11 @@ docker compose up -d --build
 
 ## 📝 LICENSE
 
+> [!NOTE]  
+> 主要程式 [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) 是根據 [AGPL-3.0 授權](https://github.com/AUTOMATIC1111/stable-diffusion-webui/blob/master/LICENSE.txt) 發佈的。
+> 請查閱他們的儲存庫以獲取源程式碼和許可證。
+> 以下是此儲存庫中 Dockerfiles 和 CI workflow 的許可證。
+
 <img src="https://github.com/jim60105/docker-stable-diffusion-webui/assets/16995691/a12d2791-048f-4b8d-87f8-96c88c9ef310" alt="agplv3" width="300" />
 
 [GNU AFFERO GENERAL PUBLIC LICENSE Version 3](/LICENSE)
@@ -150,11 +173,6 @@ This program is free software: you can redistribute it and/or modify it under th
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License along with this program. If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
-
-> [!NOTE]  
-> 主要程式 [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) 是根據 [AGPL-3.0 授權](https://github.com/AUTOMATIC1111/stable-diffusion-webui/blob/master/LICENSE.txt) 發佈的。
-> 請查閱他們的儲存庫以獲取源程式碼和許可證。
-> 以下是此儲存庫中 Dockerfiles 和 CI workflow 的許可證。
 
 > [!CAUTION]  
 > AGPLv3 授權的 Dockerfile 代表你 ***必須*** **以同樣的許可證發佈程式**，若是你：
