@@ -31,6 +31,7 @@ services:
     volumes:
       - ./data:/data
       - ./data/config_states:/app/config_states
+      - ./data/extensions:/app/extensions
       - cache:/.cache
       - repositories:/app/repositories
     deploy:
