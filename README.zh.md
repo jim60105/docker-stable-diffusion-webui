@@ -10,13 +10,13 @@
   </p>
 </section>
 
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/jim60105/docker-stable-diffusion-webui/docker_publish.yml?label=DOCKER%20BUILD&style=for-the-badge) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/jim60105/docker-stable-diffusion-webui/master?label=DATE&style=for-the-badge)
+[![CodeFactor](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui/badge)](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui) [![DeepSource](https://app.deepsource.com/gh/jim60105/docker-stable-diffusion-webui.svg/?label=active+issues&show_trend=false&token=1VuQPvmy4vSxN83egASazDLW)](https://app.deepsource.com/gh/jim60105/docker-stable-diffusion-webui/) ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/jim60105/docker-stable-diffusion-webui/docker_publish.yml?label=DOCKER%20BUILD)
 
 又一個來自社群的 [AUTOMATIC1111/Stable Diffusion web UI](https://github.com/AUTOMATIC1111/stable-diffusion-webui) Docker 映像。
 
 這個映像的主要設計理念是保持 ***小巧而簡單***，並符合 Dockerfile 最佳實踐。成功地將大小控制在約 **10 GB** 左右，相比其他現有的儲存庫節省了大約 **1/3** 的容量。
 
-這個尺寸使我能夠在 GitHub free runner 上 [CI 建置](https://github.com/jim60105/docker-stable-diffusion-webui/actions/workflows/docker_publish.yml) docker 映像。你可以從 ghcr 上拉取我[預先建置的映像](https://ghcr.io/jim60105/stable-diffusion-webui)，而不必自己在本地建置以節省時間！
+這個尺寸使我能夠在 GitHub free runner 上以 [CI workflow](https://github.com/jim60105/docker-stable-diffusion-webui/actions/workflows/docker_publish.yml) 持續地自動化建置 docker 映像。你可以從 ghcr 上拉取我[預先建置的映像](https://ghcr.io/jim60105/stable-diffusion-webui)，而不必自己在本地建置以節省時間！
 
 請由 [GitHub](https://github.com/jim60105/docker-stable-diffusion-webui) 取得 Dockerfile 或者從 [ghcr.io](https://ghcr.io/jim60105/stable-diffusion-webui) 拉取映像。
 
@@ -63,7 +63,7 @@
 
 ### Docker Image Tags
 
-Docker image tag 對應於 [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) 從 `v1.6.1` 起的非 RC 版本號和它的 `dev` 分支。
+Docker image tag 對應於 [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) 從 `v1.6.1` 起的非 RC 版本號和它的 `dev` 分支。`dev` 標籤每週會自動重建以跟上最新的變更。
 
 | Image tag    | Code version                                                                                                                |
 |--------------|-----------------------------------------------------------------------------------------------------------------------------|
@@ -92,7 +92,7 @@ docker compose down && docker compose up -d
 
 ### 使用 forge 版本
 
-有一個特殊版本 `forge`，它是基於 [lllyasviel/stable-diffusion-webui-forge](https://github.com/lllyasviel/stable-diffusion-webui-forge) 的 `main` 分支。
+有一個特殊版本 `forge`，它是基於 [lllyasviel/stable-diffusion-webui-forge](https://github.com/lllyasviel/stable-diffusion-webui-forge) 的 `main` 分支。`forge` 標籤每週會自動重建以跟上最新的變更。
 
 | Image tag | Code version                                                                                                                |
 |-----------|-----------------------------------------------------------------------------------------------------------------------------|
@@ -184,5 +184,3 @@ You should have received a copy of the GNU Affero General Public License along w
 > "發佈"意味著使該映像可供其他人下載，通常是將其推送到公開倉庫。 若僅用於個人目的，這部份不會對你產生影響。
 >
 > 有關詳細信息，請參閱 [LICENSE](LICENSE)。
-
-[![CodeFactor](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui/badge)](https://www.codefactor.io/repository/github/jim60105/docker-stable-diffusion-webui) [![DeepSource](https://app.deepsource.com/gh/jim60105/docker-stable-diffusion-webui.svg/?label=active+issues&show_trend=false&token=1VuQPvmy4vSxN83egASazDLW)](https://app.deepsource.com/gh/jim60105/docker-stable-diffusion-webui/)

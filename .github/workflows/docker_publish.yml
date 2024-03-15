@@ -7,7 +7,7 @@ on:
     tags:
       - "v*"
   schedule:
-    - cron: "0 7 * * 0" # 1st day of month at 7am UTC
+    - cron: "0 7 * * 0" # 7:00 AM every Sunday
 
   workflow_dispatch:
 
