@@ -120,6 +120,8 @@ STOPSIGNAL SIGINT
 # Use dumb-init as PID 1 to handle signals properly
 ENTRYPOINT [ "dumb-init", "--", "/bin/sh", "-c", "cp -rfs /data/scripts/ /app/scripts/ && python3 /app/launch.py --listen --port 7860 --data-dir /data \"$@\"", "--" ]
 
+CMD [ "--xformers", "--api", "--allow-code" ]
+
 ARG VERSION
 ARG RELEASE
 LABEL name="jim60105/docker-stable-diffusion-webui" \
