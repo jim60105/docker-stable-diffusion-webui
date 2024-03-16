@@ -15,12 +15,15 @@ services:
       #
       # Recommanded:
       - --xformers
+      - --api
       - --allow-code
-      - --medvram
       - --no-half-vae
       # You may or may not need:
-      - --api
-      - --enable-insecure-extension-access
+      ## Enable installing/modifying extensions from the UI, please pay attention to security considerations.
+      - --enable-insecure-extension-access 
+      ## Optimizations
+      ## https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Optimizations
+      - --medvram
       - --opt-sdp-attention
       - --opt-sdp-no-mem-attention
       - --opt-channelslast
