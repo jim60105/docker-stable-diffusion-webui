@@ -93,6 +93,8 @@ jobs:
   docker-forge:
     runs-on: ubuntu-latest
     if: (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master'))
+    # Runs one by one to reuse the docker layer cache
+    needs: docker-dev
 
     steps:
       - name: Checkout
