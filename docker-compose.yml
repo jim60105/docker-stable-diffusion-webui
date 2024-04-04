@@ -33,11 +33,17 @@ services:
       - /tmp
     volumes:
       - ./data:/data
+      # Bind the following to the script folder to fix some extensions that do not respect the --data-dir.
       - ./data/config_states:/app/config_states
       - ./data/extensions:/app/extensions
       - ./data/models:/app/models
       - cache:/.cache
       - repositories:/app/repositories
+      - type: bind
+        # Using the long syntax requires the referenced file/folder to be created beforehand.
+        # https://github.com/jim60105/docker-stable-diffusion-webui/commit/b08dfa4130019003b2c51fd8be7a8b78837cbeb1#commitcomment-140562903
+        source: ./data/ui-config.json
+        target: /app/ui-config.json
     deploy:
       resources:
         reservations:
