@@ -33,11 +33,9 @@ services:
       - /tmp
     volumes:
       - ./data:/data
-      # Bind the following to the script folder to fix some extensions that do not respect the --data-dir.
       - ./data/config_states:/app/config_states
       - ./data/extensions:/app/extensions
       - ./data/models:/app/models
-      - ./data/ui-config.json:/app/ui-config.json
       - cache:/.cache
       - repositories:/app/repositories
     deploy:
