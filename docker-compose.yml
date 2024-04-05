@@ -64,6 +64,12 @@ services:
       - repositories:/app/repositories
       - local:/home/1001/.local
       - ./data:/data
+      # I put these in HDD
+      - /mnt/data/AI/SD/data/models:/data/models
+      - /mnt/data/AI/SD/data/output:/data/output
+      # And put sd models under repo SSD
+      - ./data/models/Stable-diffusion:/data/models/Stable-diffusion
+      - ./data/models/text_encoder:/data/models/text_encoder
     deploy:
       resources:
         reservations:
