@@ -29,6 +29,10 @@ services:
       - --opt-channelslast
     ports:
       - 7860:7860
+    environment:
+      # Use the volume to get better performance then bind mount.
+      # And users should not touch these files in general.
+      - SD_WEBUI_CACHE_FILE=/.cache/cache.json
     tmpfs:
       - /tmp
     volumes:
