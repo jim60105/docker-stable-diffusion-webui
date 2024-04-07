@@ -21,10 +21,10 @@ ARG PIP_NO_WARN_SCRIPT_LOCATION=0
 ARG PIP_ROOT_USER_ACTION="ignore"
 
 # Install build dependencies
-RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends git curl && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/cache/apt \
+    --mount=type=cache,id=aptlists-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/lib/apt/lists \
+    apt-get update && apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends git curl
 
 # Install PyTorch
 # hadolint ignore=SC2102
@@ -41,10 +41,11 @@ RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/r
 
 # Replace pillow with pillow-simd (Only for x86)
 ARG TARGETPLATFORM
-RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-    apt-get update && apt-get install -y --no-install-recommends zlib1g-dev libjpeg62-turbo-dev build-essential && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
+RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/cache/apt \
+    --mount=type=cache,id=aptlists-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/lib/apt/lists \
+    if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
+    apt-get update && \
+    apt-get install -y --no-install-recommends zlib1g-dev libjpeg62-turbo-dev build-essential && \
     pip uninstall -y pillow && \
     CC="cc -mavx2" pip install -U --force-reinstall pillow-simd; \
     fi
@@ -59,12 +60,12 @@ COPY --link --from=mwader/static-ffmpeg:6.1.1 /ffmpeg /usr/local/bin/
 COPY --link --from=mwader/static-ffmpeg:6.1.1 /ffprobe /usr/local/bin/
 
 # Install runtime dependencies
-RUN apt-get update && \
+RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/cache/apt \
+    --mount=type=cache,id=aptlists-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/lib/apt/lists \
+    apt-get update && \
     apt-get install -y --no-install-recommends libgl1 libglib2.0-0 libjpeg62 libgoogle-perftools-dev \
     git libglfw3-dev libgles2-mesa-dev pkg-config libcairo2 build-essential \
-    dumb-init && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    dumb-init
 
 # Fix missing libnvinfer7
 RUN ln -s /usr/lib/x86_64-linux-gnu/libnvinfer.so /usr/lib/x86_64-linux-gnu/libnvinfer.so.7 && \
