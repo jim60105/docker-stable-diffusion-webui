@@ -145,14 +145,14 @@ docker compose up -d --build
 
 2. Place `config.json` under the `data` directory.
 3. Put the models and other existing data into corresponding folders under `data`.
-4. ***Please correct the permissions of all the files in the `data` folder*** if these files come from a Linux file system (you previously used WSL or a Linux machine):
+4. ***Please correct the permissions of all the files in the `data` folder***:
 
     ```sh
-    chown -R 1001:0 ./data && chmod -R 775 ./data
+    docker run -v ".:/app" -it busybox sh -c "chown -R 1001:0 /app/data && chmod -R 775 /app/data"
     ```
 
 > [!NOTE]  
-> This instruction modifies the owner group of the `data` directory to ***0 (root group)*** and grants ***write permission to the group***. This aligns with OpenShift best practices by ***supporting arbitrary uid***.
+> This instruction uses busybox to change the owner group of the `data` directory to ***0 (root group)*** and grants ***write permission to the group***. This aligns with OpenShift best practices by ***supporting arbitrary uid***.
 
 > [!WARNING]  
 > This image follows best practices by ***using non-root user*** and ***restricting write permissions to non-essential folders***. You may not be able to store files outside the `/data` path unless appropriate modifications have been made.
