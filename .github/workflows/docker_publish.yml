@@ -50,6 +50,8 @@ jobs:
           platforms: linux/amd64
           cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache
           cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache,mode=max
+          sbom: true
+          provenance: true
 
   docker-dev:
     runs-on: ubuntu-latest
@@ -89,6 +91,8 @@ jobs:
           platforms: linux/amd64
           cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache
           cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache,mode=max
+          sbom: true
+          provenance: true
 
   docker-forge:
     runs-on: ubuntu-latest
@@ -131,3 +135,5 @@ jobs:
           platforms: linux/amd64
           cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache
           cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache,mode=max
+          sbom: true
+          provenance: true
