@@ -98,10 +98,10 @@ docker compose down && docker compose up -d
 |-----------|-----------------------------------------------------------------------------------------------------------------------------|
 | forge     | [lllyasviel/stable-diffusion-webui-forge main branch](https://github.com/lllyasviel/stable-diffusion-webui-forge/tree/main) |
 
-請透過 `docker-compose-forge.yml` 使用它。
+請透過 `docker-compose.forge.yml` 使用它。
 
 ```bash
-docker compose -f docker-compose-forge.yml up -d
+docker compose -f docker-compose.forge.yml up -d
 ```
 
 > [!NOTE]  

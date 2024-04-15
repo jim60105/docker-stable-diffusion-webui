@@ -99,10 +99,10 @@ There's a special version `forge` which is based on the `main` branch of [lllyas
 |-----------|-----------------------------------------------------------------------------------------------------------------------------|
 | forge     | [lllyasviel/stable-diffusion-webui-forge main branch](https://github.com/lllyasviel/stable-diffusion-webui-forge/tree/main) |
 
-You can use it with the `docker-compose-forge.yml` file.
+You can use it with the `docker-compose.forge.yml` file.
 
 ```bash
-docker compose -f docker-compose-forge.yml up -d
+docker compose -f docker-compose.forge.yml up -d
 ```
 
 > [!NOTE]  
