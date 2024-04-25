@@ -26,6 +26,7 @@ services:
       - --medvram
       - --opt-sdp-attention
       - --opt-sdp-no-mem-attention
+      - --opt-split-attention
       - --opt-channelslast
     ports:
       - 7860:7860

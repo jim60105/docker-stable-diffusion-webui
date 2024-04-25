@@ -24,6 +24,7 @@ services:
       ## https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Optimizations
       - --opt-sdp-attention
       - --opt-sdp-no-mem-attention
+      - --opt-split-attention
       - --opt-channelslast
       #
       # Forge Backend
