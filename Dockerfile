@@ -19,6 +19,8 @@ WORKDIR /app
 ENV PIP_USER="true"
 ARG PIP_NO_WARN_SCRIPT_LOCATION=0
 ARG PIP_ROOT_USER_ACTION="ignore"
+ARG PIP_NO_COMPILE="true"
+ARG PIP_DISABLE_PIP_VERSION_CHECK="true"
 
 # Install build dependencies
 RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/cache/apt \
@@ -31,12 +33,12 @@ RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/v
 RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \
     pip install -U --extra-index-url https://download.pytorch.org/whl/cu121 --extra-index-url https://pypi.nvidia.com \
     torch==2.1.2 torchvision==0.16.2 \
-    xformers==0.0.23.post1 \
-    pip setuptools wheel
+    xformers==0.0.23.post1
 
 # Install requirements
 RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \
     --mount=source=stable-diffusion-webui/requirements_versions.txt,target=requirements.txt \
+    pip install -U --force-reinstall pip setuptools wheel && \
     pip install -r requirements.txt clip-anytorch
 
 # Replace pillow with pillow-simd (Only for x86)
