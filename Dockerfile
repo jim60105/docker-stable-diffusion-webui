@@ -52,6 +52,10 @@ RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/v
     CC="cc -mavx2" pip install -U --force-reinstall pillow-simd; \
     fi
 
+# Cleanup
+RUN find "/root/.local" -name '*.pyc' -print0 | xargs -0 rm -f || true ; \
+    find "/root/.local" -type d -name '__pycache__' -print0 | xargs -0 rm -rf || true ;
+
 FROM python:3.10-slim as final
 
 ENV NVIDIA_VISIBLE_DEVICES all
