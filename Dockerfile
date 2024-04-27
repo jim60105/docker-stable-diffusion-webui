@@ -7,13 +7,27 @@ ARG CACHE_HOME=/.cache
 ARG TORCH_HOME=${CACHE_HOME}/torch
 ARG HF_HOME=${CACHE_HOME}/huggingface
 
-FROM python:3.10-slim as build
+FROM python:3.10-slim as base
 
 # RUN mount cache for multi-arch: https://github.com/docker/buildx/issues/549#issuecomment-1788297892
 ARG TARGETARCH
 ARG TARGETVARIANT
 
-WORKDIR /app
+# Install dependencies
+RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/cache/apt \
+    --mount=type=cache,id=aptlists-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/lib/apt/lists \
+    apt-get update && apt-get install -y --no-install-recommends \
+    # Install Pillow dependencies explicitly
+    # https://pillow.readthedocs.io/en/stable/installation/building-from-source.html
+    libjpeg62-turbo-dev libwebp-dev zlib1g-dev
+
+FROM base as build
+
+# RUN mount cache for multi-arch: https://github.com/docker/buildx/issues/549#issuecomment-1788297892
+ARG TARGETARCH
+ARG TARGETVARIANT
+
+WORKDIR /source
 
 # Install under /root/.local
 ENV PIP_USER="true"
@@ -43,11 +57,8 @@ RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/r
 
 # Replace pillow with pillow-simd (Only for x86)
 ARG TARGETPLATFORM
-RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/cache/apt \
-    --mount=type=cache,id=aptlists-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/lib/apt/lists \
+RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \
     if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-    apt-get update && \
-    apt-get install -y --no-install-recommends zlib1g-dev libjpeg62-turbo-dev build-essential && \
     pip uninstall -y pillow && \
     CC="cc -mavx2" pip install -U --force-reinstall pillow-simd; \
     fi
@@ -56,7 +67,7 @@ RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/v
 RUN find "/root/.local" -name '*.pyc' -print0 | xargs -0 rm -f || true ; \
     find "/root/.local" -type d -name '__pycache__' -print0 | xargs -0 rm -rf || true ;
 
-FROM python:3.10-slim as final
+FROM base as final
 
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
@@ -69,7 +80,7 @@ COPY --link --from=mwader/static-ffmpeg:6.1.1 /ffprobe /usr/local/bin/
 RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/cache/apt \
     --mount=type=cache,id=aptlists-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/lib/apt/lists \
     apt-get update && \
-    apt-get install -y --no-install-recommends libgl1 libglib2.0-0 libjpeg62 libgoogle-perftools-dev \
+    apt-get install -y --no-install-recommends libgl1 libglib2.0-0 libgoogle-perftools-dev \
     git libglfw3-dev libgles2-mesa-dev pkg-config libcairo2 build-essential \
     dumb-init
 

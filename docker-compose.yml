@@ -2,8 +2,15 @@ services:
   stable-diffusion-webui:
     container_name: stable-diffusion-webui
     image: ghcr.io/jim60105/stable-diffusion-webui:v1.9.3
-    # build: .
     user: "1001:0"
+    build:
+      context: .
+      args:
+        - UID=1001
+      cache_from:
+        - ghcr.io/jim60105/stable-diffusion-webui:cache
+      cache_to:
+        - type=inline
     command:
       # https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Command-Line-Arguments-and-Settings
       # https://github.com/AUTOMATIC1111/stable-diffusion-webui/blob/master/modules/cmd_args.py
