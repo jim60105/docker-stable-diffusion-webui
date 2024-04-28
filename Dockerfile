@@ -161,7 +161,67 @@ LABEL name="jim60105/docker-stable-diffusion-webui" \
     description="Stable Diffusion web UI: A web interface for Stable Diffusion, implemented using Gradio library. This is the docker image for AUTOMATIC1111's stable-diffusion-webui. For more information about this tool, please visit the following website: https://github.com/AUTOMATIC1111/stable-diffusion-webui."
 
 ######
-# Final stage
+# Compile with Nuitka
+# Use in final_nuitka stage and report_nuitka stage
+# We use this stage to compile the code in the CI pipeline. This process takes a long time and can easily lead to problems.
+######
+FROM build as compile_nuitka
+
+# Install build dependencies for Nuitka standalone mode
+RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/cache/apt \
+    --mount=type=cache,id=aptlists-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/lib/apt/lists \
+    apt-get install -y --no-install-recommends patchelf
+
+# Install Nuitka
+RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \
+    pip install nuitka
+
+# Compile with Nuitka
+RUN --mount=source=stable-diffusion-webui,target=.,rw \
+    python3 -m nuitka \
+    --enable-plugins=no-qt \
+    --enable-plugins=transformers \
+    --include-package=scripts \
+    --include-data-files=script.js=script.js \
+    --include-data-files=style.css=style.css \
+    --include-data-dir=configs=configs \
+    --include-data-dir=extensions-builtin=extensions-builtin \
+    --include-data-dir=html=html \
+    --include-data-dir=javascript=javascript \
+    --include-data-dir=models=models \
+    --include-data-dir=textual_inversion_templates=textual_inversion_templates \
+    --output-dir=/ \
+    --report=/compilationreport.xml \
+    --standalone \
+    --deployment \
+    --disable-cache=all \
+    --remove-output \
+    launch.py
+
+######
+# Report stage for Nuitka
+######
+FROM scratch AS report_nuitka
+COPY --link --chown=$UID:0 --chmod=775 --from=compile_nuitka /compilationreport.xml /
+
+######
+# Final stage for Nuitka
+# We use this stage in CI pipeline.
+######
+FROM prepare_final as final_nuitka
+
+# Copy dependencies and code (and support arbitrary uid for OpenShift best practice)
+COPY --link --chown=$UID:0 --chmod=775 --from=build_big /root/.local /home/$UID/.local
+COPY --link --chown=$UID:0 --chmod=775 --from=compile_nuitka /launch.dist /app
+
+# Use dumb-init as PID 1 to handle signals properly
+ENTRYPOINT [ "dumb-init", "--", "/bin/sh", "-c", "cp -rfs /data/scripts/. /app/scripts/ && /app/launch.bin --listen --port 7860 --data-dir /data \"$@\"", "--" ]
+
+CMD [ "--xformers", "--api", "--allow-code" ]
+
+######
+# Normal final stage
+# Users should use this stage when they build the image locally
 ######
 FROM prepare_final as final
 
