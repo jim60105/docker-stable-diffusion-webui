@@ -167,20 +167,33 @@ LABEL name="jim60105/docker-stable-diffusion-webui" \
 ######
 FROM build as compile_nuitka
 
+# https://nuitka.net/user-documentation/tips.html#control-where-caches-live
+ENV NUITKA_CACHE_DIR_CCACHE=/cache
+ENV NUITKA_CACHE_DIR_DOWNLOADS=/cache
+ENV NUITKA_CACHE_DIR_CLCACHE=/cache
+ENV NUITKA_CACHE_DIR_BYTECODE=/cache
+ENV NUITKA_CACHE_DIR_DLL_DEPENDENCIES=/cache
+
 # Install build dependencies for Nuitka standalone mode
 RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/cache/apt \
     --mount=type=cache,id=aptlists-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/lib/apt/lists \
-    apt-get install -y --no-install-recommends patchelf
+    echo 'deb http://deb.debian.org/debian bookworm-backports main' > /etc/apt/sources.list.d/backports.list && \
+    apt-get update && apt-get install -y --no-install-recommends \
+    patchelf ccache clang upx-ucl
 
 # Install Nuitka
 RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \
     pip install nuitka
 
 # Compile with Nuitka
-RUN --mount=source=stable-diffusion-webui,target=.,rw \
+RUN --mount=type=cache,id=nuitka-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/cache \
+    --mount=source=stable-diffusion-webui,target=.,rw \
     python3 -m nuitka \
+    --python-flag=nosite,-O \
+    --clang \
+    --lto=yes \
     --enable-plugins=no-qt \
-    --enable-plugins=transformers \
+    --enable-plugins=upx \
     --include-package=scripts \
     --include-data-files=${PWD}=./=**/requirements* \
     --include-data-files=${PWD}=./=**/*.html \
@@ -196,7 +209,6 @@ RUN --mount=source=stable-diffusion-webui,target=.,rw \
     --report=/compilationreport.xml \
     --standalone \
     --deployment \
-    --disable-cache=all \
     --remove-output \
     launch.py
 
@@ -219,7 +231,8 @@ COPY --chown=$UID:0 --chmod=775 --from=compile_nuitka /launch.dist /app
 RUN ln -sf /usr/local/bin/python /app/python3
 
 # Use dumb-init as PID 1 to handle signals properly
-ENTRYPOINT [ "dumb-init", "--", "/bin/sh", "-c", "cp -rfs /data/scripts/. /app/scripts/ && /app/launch.bin --listen --port 7860 --data-dir /data \"$@\"", "--" ]
+# !The flag --skip-torch-cuda-test is used to skip the testing in webui that is not compatible with Nuitka.
+ENTRYPOINT [ "dumb-init", "--", "/bin/sh", "-c", "cp -rfs /data/scripts/. /app/scripts/ && /app/launch.bin --listen --port 7860 --data-dir /data --skip-torch-cuda-test \"$@\"", "--" ]
 
 CMD [ "--xformers", "--api", "--allow-code" ]
 
