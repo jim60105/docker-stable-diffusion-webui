@@ -1,15 +1,26 @@
+# Check this guide for more information about publishing to ghcr.io with GitHub Actions:
+# https://docs.github.com/en/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions#upgrading-a-workflow-that-accesses-ghcrio
+
+# Build the Docker image and push it to the registry
 name: docker_publish
 
 on:
   push:
     branches:
       - "master"
+    # Trigger the workflow on tags push that match the pattern v*, for example v1.0.0
     tags:
       - "v*"
   schedule:
     - cron: "0 7 * * 0" # 7:00 AM every Sunday
 
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
+# Sets the permissions granted to the GITHUB_TOKEN for the actions in this job.
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   docker-tag:
@@ -28,30 +39,10 @@ jobs:
           git fetch --all --tags && \
           git checkout tags/${{ github.ref_name }} -b ${{ github.ref_name }}
 
-      - name: Setup docker
-        id: setup
-        uses: ./.github/workflows/docker-reused-setup-steps
+      - name: Build docker
+        uses: ./.github/workflows/docker-reused-steps
         with:
-          CR_PAT: ${{ secrets.CR_PAT }}
           tag: ${{ github.ref_name }}
-
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          target: final
-          tags: ${{ steps.setup.outputs.tags }}
-          labels: ${{ steps.setup.outputs.labels }}
-          build-args: |
-            VERSION=${{ github.ref_name }}
-            RELEASE=${{ github.run_number }}
-          platforms: linux/amd64
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache,mode=max
-          sbom: true
-          provenance: true
 
   docker-dev:
     runs-on: ubuntu-latest
@@ -69,30 +60,10 @@ jobs:
           git fetch origin +refs/heads/*:refs/remotes/origin/* -v && \
           git checkout -b dev origin/dev;
 
-      - name: Setup docker
-        id: setup
-        uses: ./.github/workflows/docker-reused-setup-steps
+      - name: Build docker
+        uses: ./.github/workflows/docker-reused-steps
         with:
-          CR_PAT: ${{ secrets.CR_PAT }}
           tag: dev
-
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          target: final
-          tags: ${{ steps.setup.outputs.tags }}
-          labels: ${{ steps.setup.outputs.labels }}
-          build-args: |
-            VERSION=dev
-            RELEASE=${{ github.run_number }}
-          platforms: linux/amd64
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache,mode=max
-          sbom: true
-          provenance: true
 
   docker-forge:
     runs-on: ubuntu-latest
@@ -113,27 +84,7 @@ jobs:
           git fetch forge +refs/heads/*:refs/remotes/forge/* -v && \
           git checkout -b main forge/main;
 
-      - name: Setup docker
-        id: setup
-        uses: ./.github/workflows/docker-reused-setup-steps
+      - name: Build docker
+        uses: ./.github/workflows/docker-reused-steps
         with:
-          CR_PAT: ${{ secrets.CR_PAT }}
           tag: forge
-
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          target: final
-          tags: ${{ steps.setup.outputs.tags }}
-          labels: ${{ steps.setup.outputs.labels }}
-          build-args: |
-            VERSION=forge
-            RELEASE=${{ github.run_number }}
-          platforms: linux/amd64
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache,mode=max
-          sbom: true
-          provenance: true

@@ -1,0 +1,64 @@
+name: Reusable docker workflow
+
+description: Reusable docker workflow.
+
+inputs:
+  tag:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    # We require additional space due to the large size of our image. (~10GB)
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+      with:
+        tool-cache: true
+        android: true
+        dotnet: true
+        haskell: true
+        large-packages: true
+        docker-images: true
+        swap-storage: true
+
+    - name: Docker meta:${{ inputs.tag }}
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui
+        tags: |
+          ${{ inputs.tag }}
+          latest,enable=${{ inputs.tag == 'dev' }}
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    # You may need to manage write and read access of GitHub Actions for repositories in the container settings.
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ github.token }}
+
+    - name: Build and push
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        target: final
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          VERSION=${{ inputs.tag }}
+          RELEASE=${{ github.run_number }}
+        platforms: linux/amd64
+        # Cache to regietry instead of gha to avoid the capacity limit.
+        cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache
+        cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache,mode=max
+        sbom: true
+        provenance: true
