@@ -50,7 +50,8 @@ runs:
         context: .
         file: ./Dockerfile
         push: true
-        target: final
+        load: true
+        target: final_nuitka
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         build-args: |
@@ -62,3 +63,23 @@ runs:
         cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache,mode=max
         sbom: true
         provenance: true
+
+    - name: Build report
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile
+        target: report_nuitka
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          VERSION=${{ inputs.tag }}
+          RELEASE=${{ github.run_number }}
+        platforms: linux/amd64
+        outputs: compilationreport.xml
+
+    - name: Upload report
+      uses: actions/upload-artifact@v4
+      with:
+        name: compilationreport
+        path: compilationreport-${{ inputs.tag }}.xml
