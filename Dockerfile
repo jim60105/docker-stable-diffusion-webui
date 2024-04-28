@@ -29,7 +29,7 @@ RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/v
 
 ######
 # Build stage for big packages
-# Use in build stage and final_nuitka stage
+# Use in build stage
 ######
 FROM base as build_big
 
@@ -182,8 +182,10 @@ RUN --mount=source=stable-diffusion-webui,target=.,rw \
     --enable-plugins=no-qt \
     --enable-plugins=transformers \
     --include-package=scripts \
-    --include-data-files=script.js=script.js \
-    --include-data-files=style.css=style.css \
+    --include-data-files=${PWD}=./=**/requirements* \
+    --include-data-files=${PWD}=./=**/*.html \
+    --include-data-files=${PWD}=./=**/*.js \
+    --include-data-files=${PWD}=./=**/*.css \
     --include-data-dir=configs=configs \
     --include-data-dir=extensions-builtin=extensions-builtin \
     --include-data-dir=html=html \
@@ -202,6 +204,7 @@ RUN --mount=source=stable-diffusion-webui,target=.,rw \
 # Report stage for Nuitka
 ######
 FROM scratch AS report_nuitka
+
 COPY --link --chown=$UID:0 --chmod=775 --from=compile_nuitka /compilationreport.xml /
 
 ######
@@ -211,8 +214,9 @@ COPY --link --chown=$UID:0 --chmod=775 --from=compile_nuitka /compilationreport.
 FROM prepare_final as final_nuitka
 
 # Copy dependencies and code (and support arbitrary uid for OpenShift best practice)
-COPY --link --chown=$UID:0 --chmod=775 --from=build_big /root/.local /home/$UID/.local
-COPY --link --chown=$UID:0 --chmod=775 --from=compile_nuitka /launch.dist /app
+COPY --chown=$UID:0 --chmod=775 --from=compile_nuitka /launch.dist /app
+
+RUN ln -sf /usr/local/bin/python /app/python3
 
 # Use dumb-init as PID 1 to handle signals properly
 ENTRYPOINT [ "dumb-init", "--", "/bin/sh", "-c", "cp -rfs /data/scripts/. /app/scripts/ && /app/launch.bin --listen --port 7860 --data-dir /data \"$@\"", "--" ]
