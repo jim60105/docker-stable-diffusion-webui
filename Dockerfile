@@ -191,9 +191,20 @@ RUN --mount=type=cache,id=nuitka-$TARGETARCH$TARGETVARIANT,sharing=locked,target
     python3 -m nuitka \
     --python-flag=nosite,-O \
     --clang \
-    --lto=yes \
+    # Not using LTO because it will cause the compilation to fail.
+    --lto=no \
     --enable-plugins=no-qt \
-    --enable-plugins=upx \
+    # The upx plugin will stop when any error occurs, such as the file is too large.(768MB)
+    # https://github.com/upx/upx/issues/374
+    # --enable-plugins=upx \
+    --noinclude-setuptools-mode=nofollow \
+    --noinclude-numba-mode=nofollow \
+    --noinclude-custom-mode=torch:nofollow \
+    --noinclude-custom-mode=xformers:nofollow \
+    --noinclude-custom-mode=triton:nofollow \
+    --noinclude-custom-mode=llvmlite:nofollow \
+    --noinclude-custom-mode=scipy:nofollow \
+    --noinclude-custom-mode=pandas:nofollow \
     --include-package=scripts \
     --include-data-files=${PWD}=./=**/requirements* \
     --include-data-files=${PWD}=./=**/*.html \
@@ -210,7 +221,8 @@ RUN --mount=type=cache,id=nuitka-$TARGETARCH$TARGETVARIANT,sharing=locked,target
     --standalone \
     --deployment \
     --remove-output \
-    launch.py
+    launch.py && \
+    upx -9 /launch.dist
 
 ######
 # Report stage for Nuitka
@@ -226,13 +238,21 @@ COPY --link --chown=$UID:0 --chmod=775 --from=compile_nuitka /compilationreport.
 FROM prepare_final as final_nuitka
 
 # Copy dependencies and code (and support arbitrary uid for OpenShift best practice)
-COPY --chown=$UID:0 --chmod=775 --from=compile_nuitka /launch.dist /app
+ARG UID
+COPY --link --chown=$UID:0 --chmod=775 --from=compile_nuitka /launch.dist /app
+COPY --link --chown=$UID:0 --chmod=775 --from=compile_nuitka /root/.local/lib/python3.10/site-packages/setuptools /app/setuptools
+COPY --link --chown=$UID:0 --chmod=775 --from=compile_nuitka /root/.local/lib/python3.10/site-packages/numba /app/numba
+COPY --link --chown=$UID:0 --chmod=775 --from=compile_nuitka /root/.local/lib/python3.10/site-packages/torch /app/torch
+COPY --link --chown=$UID:0 --chmod=775 --from=compile_nuitka /root/.local/lib/python3.10/site-packages/xformers /app/xformers
+COPY --link --chown=$UID:0 --chmod=775 --from=compile_nuitka /root/.local/lib/python3.10/site-packages/triton /app/triton
+COPY --link --chown=$UID:0 --chmod=775 --from=compile_nuitka /root/.local/lib/python3.10/site-packages/llvmlite /app/llvmlite
+COPY --link --chown=$UID:0 --chmod=775 --from=compile_nuitka /root/.local/lib/python3.10/site-packages/scipy /app/scipy
+COPY --link --chown=$UID:0 --chmod=775 --from=compile_nuitka /root/.local/lib/python3.10/site-packages/pandas /app/pandas
 
 RUN ln -sf /usr/local/bin/python /app/python3
 
 # Use dumb-init as PID 1 to handle signals properly
-# !The flag --skip-torch-cuda-test is used to skip the testing in webui that is not compatible with Nuitka.
-ENTRYPOINT [ "dumb-init", "--", "/bin/sh", "-c", "cp -rfs /data/scripts/. /app/scripts/ && /app/launch.bin --listen --port 7860 --data-dir /data --skip-torch-cuda-test \"$@\"", "--" ]
+ENTRYPOINT [ "dumb-init", "--", "/bin/sh", "-c", "cp -rfs /data/scripts/. /app/scripts/ && /app/launch.bin --listen --port 7860 --data-dir /data \"$@\"", "--" ]
 
 CMD [ "--xformers", "--api", "--allow-code" ]
 
@@ -244,8 +264,8 @@ FROM prepare_final as final
 
 # Copy dependencies and code (and support arbitrary uid for OpenShift best practice)
 ARG UID
-COPY --link --chown=$UID:0 --chmod=775 --from=build /root/.local /home/$UID/.local
 COPY --link --chown=$UID:0 --chmod=775 stable-diffusion-webui /app
+COPY --link --chown=$UID:0 --chmod=775 --from=build /root/.local /home/$UID/.local
 
 # Use dumb-init as PID 1 to handle signals properly
 ENTRYPOINT [ "dumb-init", "--", "/bin/sh", "-c", "cp -rfs /data/scripts/. /app/scripts/ && python3 /app/launch.py --listen --port 7860 --data-dir /data \"$@\"", "--" ]
