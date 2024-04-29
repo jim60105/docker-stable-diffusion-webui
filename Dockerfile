@@ -167,6 +167,9 @@ LABEL name="jim60105/docker-stable-diffusion-webui" \
 ######
 FROM build as compile_nuitka
 
+ARG TARGETARCH
+ARG TARGETVARIANT
+
 # https://nuitka.net/user-documentation/tips.html#control-where-caches-live
 ENV NUITKA_CACHE_DIR_CCACHE=/cache
 ENV NUITKA_CACHE_DIR_DOWNLOADS=/cache
@@ -229,6 +232,7 @@ RUN --mount=type=cache,id=nuitka-$TARGETARCH$TARGETVARIANT,sharing=locked,target
 ######
 FROM scratch AS report_nuitka
 
+ARG UID
 COPY --link --chown=$UID:0 --chmod=775 --from=compile_nuitka /compilationreport.xml /
 
 ######
