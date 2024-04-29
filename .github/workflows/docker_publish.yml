@@ -5,10 +5,8 @@
 name: docker_publish
 
 on:
+  # Trigger the workflow on tags push that match the pattern v*, for example v1.0.0
   push:
-    branches:
-      - "master"
-    # Trigger the workflow on tags push that match the pattern v*, for example v1.0.0
     tags:
       - "v*"
   schedule:
