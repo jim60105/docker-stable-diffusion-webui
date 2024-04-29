@@ -64,6 +64,9 @@ RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/r
 ######
 FROM build_big as build
 
+ARG TARGETARCH
+ARG TARGETVARIANT
+
 # Install requirements
 RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \
     --mount=source=stable-diffusion-webui/requirements_versions.txt,target=requirements.txt \
@@ -163,6 +166,7 @@ LABEL name="jim60105/docker-stable-diffusion-webui" \
 FROM prepare_final as final
 
 # Copy dependencies and code (and support arbitrary uid for OpenShift best practice)
+ARG UID
 COPY --link --chown=$UID:0 --chmod=775 --from=build /root/.local /home/$UID/.local
 COPY --link --chown=$UID:0 --chmod=775 stable-diffusion-webui /app
 
