@@ -101,8 +101,8 @@ ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
 
 # ffmpeg
-COPY --link --from=mwader/static-ffmpeg:6.1.1 /ffmpeg /usr/local/bin/
-COPY --link --from=mwader/static-ffmpeg:6.1.1 /ffprobe /usr/local/bin/
+COPY --link --from=mwader/static-ffmpeg:7.0-1 /ffmpeg /usr/local/bin/
+COPY --link --from=mwader/static-ffmpeg:7.0-1 /ffprobe /usr/local/bin/
 
 # Fix missing libnvinfer7
 RUN ln -s /usr/lib/x86_64-linux-gnu/libnvinfer.so /usr/lib/x86_64-linux-gnu/libnvinfer.so.7 && \
