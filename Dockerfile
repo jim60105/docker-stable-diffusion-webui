@@ -29,7 +29,7 @@ RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/v
 
 ######
 # Build stage for big packages
-# Use in build stage
+# Use in build stage and final_requirements_not_installed stage
 ######
 FROM base as build_big
 
@@ -67,6 +67,13 @@ FROM build_big as build
 ARG TARGETARCH
 ARG TARGETVARIANT
 
+# Install under /root/.local
+ENV PIP_USER="true"
+ARG PIP_NO_WARN_SCRIPT_LOCATION=0
+ARG PIP_ROOT_USER_ACTION="ignore"
+ARG PIP_NO_COMPILE="true"
+ARG PIP_DISABLE_PIP_VERSION_CHECK="true"
+
 # Install requirements
 RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \
     --mount=source=stable-diffusion-webui/requirements_versions.txt,target=requirements.txt \
@@ -86,7 +93,7 @@ RUN find "/root/.local" -name '*.pyc' -print0 | xargs -0 rm -f || true ; \
 
 ######
 # Preparing final stage
-# Use in final and final_nuitka stage
+# Use in final, final_requirements_not_installed and final_nuitka stage
 ######
 FROM base as prepare_final
 
@@ -94,8 +101,8 @@ ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
 
 # ffmpeg
-COPY --link --from=mwader/static-ffmpeg:6.1.1 /ffmpeg /usr/local/bin/
-COPY --link --from=mwader/static-ffmpeg:6.1.1 /ffprobe /usr/local/bin/
+COPY --link --from=mwader/static-ffmpeg:7.0-1 /ffmpeg /usr/local/bin/
+COPY --link --from=mwader/static-ffmpeg:7.0-1 /ffprobe /usr/local/bin/
 
 # Fix missing libnvinfer7
 RUN ln -s /usr/lib/x86_64-linux-gnu/libnvinfer.so /usr/lib/x86_64-linux-gnu/libnvinfer.so.7 && \
@@ -143,6 +150,11 @@ EXPOSE 7860
 USER $UID
 
 STOPSIGNAL SIGINT
+
+# Use dumb-init as PID 1 to handle signals properly
+ENTRYPOINT [ "dumb-init", "--", "/bin/sh", "-c", "cp -rfs /data/scripts/. /app/scripts/ && python3 /app/launch.py --listen --port 7860 --data-dir /data \"$@\"", "--" ]
+
+CMD [ "--xformers", "--api", "--allow-code" ]
 
 ARG VERSION
 ARG RELEASE
@@ -265,8 +277,19 @@ ENTRYPOINT [ "dumb-init", "--", "/bin/sh", "-c", "cp -rfs /data/scripts/. /app/s
 CMD [ "--xformers", "--api", "--allow-code" ]
 
 ######
+# Final stage with requirements not installed.
+# It should be smaller but slower to start at the first time.
+# This works because the webui will check the requirements on the fly.
+######
+FROM prepare_final as final_requirements_not_installed
+
+# Copy dependencies and code (and support arbitrary uid for OpenShift best practice)
+ARG UID
+COPY --link --chown=$UID:0 --chmod=775 --from=build_big /root/.local /home/$UID/.local
+COPY --link --chown=$UID:0 --chmod=775 stable-diffusion-webui /app
+
+######
 # Normal final stage
-# Users should use this stage when they build the image locally
 ######
 FROM prepare_final as final
 
@@ -274,8 +297,3 @@ FROM prepare_final as final
 ARG UID
 COPY --link --chown=$UID:0 --chmod=775 stable-diffusion-webui /app
 COPY --link --chown=$UID:0 --chmod=775 --from=build /root/.local /home/$UID/.local
-
-# Use dumb-init as PID 1 to handle signals properly
-ENTRYPOINT [ "dumb-init", "--", "/bin/sh", "-c", "cp -rfs /data/scripts/. /app/scripts/ && python3 /app/launch.py --listen --port 7860 --data-dir /data \"$@\"", "--" ]
-
-CMD [ "--xformers", "--api", "--allow-code" ]
