@@ -224,8 +224,12 @@ RUN --mount=type=cache,id=nuitka-$TARGETARCH$TARGETVARIANT,sharing=locked,target
     --standalone \
     --deployment \
     --remove-output \
-    launch.py && \
-    upx -9 /launch.dist
+    launch.py 
+
+# TODO Should combine with the previous line, but seperate for testing now.
+# UPX skip small files: https://github.com/upx/upx/blob/5bef96806860382395d9681f3b0c69e0f7e853cf/src/p_unix.cpp#L80
+# UPX skip large files: https://github.com/upx/upx/blob/b0dc48316516d236664dfc5f1eb5f2de00fc0799/src/conf.h#L134
+RUN find /launch.dist -type f \( -name '*.so' -o -name '*.so.*' -o -name '*.bin' \) -size +4k -size -768M -exec chmod +x {} \; -exec upx -9 {} + || true;
 
 ######
 # Report stage for Nuitka
@@ -256,7 +260,7 @@ COPY --link --chown=$UID:0 --chmod=775 --from=compile_nuitka /root/.local/lib/py
 RUN ln -sf /usr/local/bin/python /app/python3
 
 # Use dumb-init as PID 1 to handle signals properly
-ENTRYPOINT [ "dumb-init", "--", "/bin/sh", "-c", "cp -rfs /data/scripts/. /app/scripts/ && /app/launch.bin --listen --port 7860 --data-dir /data \"$@\"", "--" ]
+ENTRYPOINT [ "dumb-init", "--", "/bin/sh", "-c", "cp -rfs /data/scripts/. /app/scripts/ && /app/launch.bin --listen --port 7860 --data-dir /data --skip-torch-cuda-test \"$@\"", "--" ]
 
 CMD [ "--xformers", "--api", "--allow-code" ]
 
