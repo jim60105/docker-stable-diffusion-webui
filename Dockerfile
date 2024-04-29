@@ -29,7 +29,7 @@ RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/v
 
 ######
 # Build stage for big packages
-# Use in build stage and final_nuitka stage
+# Use in build stage and final_requirements_not_installed stage
 ######
 FROM base as build_big
 
@@ -66,6 +66,13 @@ FROM build_big as build
 
 ARG TARGETARCH
 ARG TARGETVARIANT
+
+# Install under /root/.local
+ENV PIP_USER="true"
+ARG PIP_NO_WARN_SCRIPT_LOCATION=0
+ARG PIP_ROOT_USER_ACTION="ignore"
+ARG PIP_NO_COMPILE="true"
+ARG PIP_DISABLE_PIP_VERSION_CHECK="true"
 
 # Install requirements
 RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \
@@ -144,6 +151,11 @@ USER $UID
 
 STOPSIGNAL SIGINT
 
+# Use dumb-init as PID 1 to handle signals properly
+ENTRYPOINT [ "dumb-init", "--", "/bin/sh", "-c", "cp -rfs /data/scripts/. /app/scripts/ && python3 /app/launch.py --listen --port 7860 --data-dir /data \"$@\"", "--" ]
+
+CMD [ "--xformers", "--api", "--allow-code" ]
+
 ARG VERSION
 ARG RELEASE
 LABEL name="jim60105/docker-stable-diffusion-webui" \
@@ -161,7 +173,19 @@ LABEL name="jim60105/docker-stable-diffusion-webui" \
     description="Stable Diffusion web UI: A web interface for Stable Diffusion, implemented using Gradio library. This is the docker image for AUTOMATIC1111's stable-diffusion-webui. For more information about this tool, please visit the following website: https://github.com/AUTOMATIC1111/stable-diffusion-webui."
 
 ######
-# Final stage
+# Final stage with requirements not installed.
+# It should be smaller but slower to start at the first time.
+# This works because the webui will check the requirements on the fly.
+######
+FROM prepare_final as final_requirements_not_installed
+
+# Copy dependencies and code (and support arbitrary uid for OpenShift best practice)
+ARG UID
+COPY --link --chown=$UID:0 --chmod=775 --from=build_big /root/.local /home/$UID/.local
+COPY --link --chown=$UID:0 --chmod=775 stable-diffusion-webui /app
+
+######
+# Normal final stage
 ######
 FROM prepare_final as final
 
@@ -169,8 +193,3 @@ FROM prepare_final as final
 ARG UID
 COPY --link --chown=$UID:0 --chmod=775 --from=build /root/.local /home/$UID/.local
 COPY --link --chown=$UID:0 --chmod=775 stable-diffusion-webui /app
-
-# Use dumb-init as PID 1 to handle signals properly
-ENTRYPOINT [ "dumb-init", "--", "/bin/sh", "-c", "cp -rfs /data/scripts/. /app/scripts/ && python3 /app/launch.py --listen --port 7860 --data-dir /data \"$@\"", "--" ]
-
-CMD [ "--xformers", "--api", "--allow-code" ]
