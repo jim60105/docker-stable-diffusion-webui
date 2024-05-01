@@ -8,6 +8,7 @@ services:
       target: final
       args:
         - UID=1001
+        # - SKIP_REQUIREMENTS_INSTALL=true
       cache_from:
         - ghcr.io/jim60105/stable-diffusion-webui:cache
       cache_to:

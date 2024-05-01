@@ -30,6 +30,14 @@ runs:
           ${{ inputs.tag }}
           latest,enable=${{ inputs.tag == 'dev' }}
 
+    - name: Docker meta:${{ inputs.tag }}-runtime-deps
+      id: meta-runtime-deps
+      uses: docker/metadata-action@v5
+      with:
+        images: ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui
+        tags: |
+          ${{ inputs.tag }}-runtime-deps
+
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
 
@@ -43,6 +51,27 @@ runs:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ github.token }}
+
+    - name: Build and push-runtime-deps
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile
+        load: true
+        push: true
+        target: final
+        tags: ${{ steps.meta-runtime-deps.outputs.tags }}
+        labels: ${{ steps.meta-runtime-deps.outputs.labels }}
+        build-args: |
+          VERSION=${{ inputs.tag }}
+          RELEASE=${{ github.run_number }}
+          SKIP_REQUIREMENTS_INSTALL=true
+        platforms: linux/amd64
+        # Cache to regietry instead of gha to avoid the capacity limit.
+        cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache
+        cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache,mode=max
+        sbom: true
+        provenance: true
 
     - name: Build and push
       uses: docker/build-push-action@v5

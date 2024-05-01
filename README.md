@@ -110,13 +110,27 @@ docker compose -f docker-compose.forge.yml up -d
 > Please stop the running service before starting another one.  
 > ![image](https://github.com/jim60105/docker-stable-diffusion-webui/assets/16995691/f7aecb66-5416-4806-90d8-b6c6be6c1bad)
 
+### `runtime-deps` images
+
+Some versions also have `runtime-deps` images that you can use, like `v1.8.0-runtime-deps`, `v1.9.3-runtime-deps`, and `forge-runtime-deps`.
+
+The `runtime-deps` image does not include pre-installed pip requirements.  
+Instead, the requirements will be installed when the image is first launched.
+
+This leads to a smaller image size of **1.3GB**!
+
+On the downside, the initial startup process may take some time and could fail if the necessary packages are not accessible.
+
+Consider using them if they fit your needs.
+
+> [!NOTE]  
+> You can build it locally with Docker build arguments: `SKIP_REQUIREMENTS_INSTALL=true`
+
 ## 🛠️ Build instructions
 
 > [!IMPORTANT]  
 > Clone the Git repository ***recursively*** to include submodules:  
 > `git clone --recursive https://github.com/jim60105/docker-stable-diffusion-webui.git`
-
-Uncomment [the `# build: .` line in `docker-compose.yml`](https://github.com/jim60105/docker-stable-diffusion-webui/blob/bc23c16b99034147c74ab901ae7f605d5d9fc21c/docker-compose.yml#L7) and build the image with the following command.
 
 ```bash
 docker compose up -d --build
