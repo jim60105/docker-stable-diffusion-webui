@@ -1,17 +1,20 @@
 #!/bin/sh
 
 ln_scripts() {
+    echo "Linking scripts..."
     mkdir -p /data/scripts /app/scripts
     ln -sv /data/scripts/* /app/scripts 2>/dev/null
 }
 
 create_ui_config() {
     if [ ! -f /data/ui-config.json ]; then
+        echo "Creating empty UI config..."
         echo "{}" >/data/ui-config.json
     fi
 }
 
 data_dir_fallback() {
+    echo "Setting up data directory fallback..."
     ln -svT /data/ui-config.json /app/ui-config.json 2>/dev/null
 
     mkdir -p /data/config_states /data/extensions /data/models
@@ -45,8 +48,10 @@ handle_sigint() {
     kill -s INT $python_pid
     wait $python_pid
 
-    echo "WebUI stopped. Correcting user data permissions..."
-    chmod -R 775 /data || true
+    echo "WebUI stopped."
+    echo "Correcting user data permissions... Please wait a second."
+    chmod -R 775 /data 2>/dev/null
+    echo "Done. Exiting"
     exit 0
 }
 
