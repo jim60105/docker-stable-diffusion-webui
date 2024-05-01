@@ -1,0 +1,64 @@
+#!/bin/sh
+
+ln_scripts() {
+    mkdir -p /data/scripts /app/scripts
+    ln -sv /data/scripts/* /app/scripts 2>/dev/null
+}
+
+create_ui_config() {
+    if [ ! -f /data/ui-config.json ]; then
+        echo "{}" >/data/ui-config.json
+    fi
+}
+
+data_dir_fallback() {
+    ln -svT /data/ui-config.json /app/ui-config.json 2>/dev/null
+
+    mkdir -p /data/config_states /data/extensions /data/models
+    mkdir -p /app/config_states /app/extensions /app/models
+    ln -svT /data/config_states/* /app/config_states 2>/dev/null
+    ln -svd /data/extensions/* /app/extensions 2>/dev/null
+
+    find ./models -type f -name 'Put*here.txt' -exec rm {} \;
+    find ./models -type d -empty -delete
+    ln -svd /data/models/* /app/models 2>/dev/null
+}
+
+install_requirements() {
+    if ! pip show torch 2>/dev/null | grep -q Name; then
+        echo "Installing torch and related packages... (This will only run once and might take some time)"
+        pip install -U --force-reinstall pip setuptools wheel
+        pip install -U \
+            --extra-index-url https://download.pytorch.org/whl/cu121 \
+            --extra-index-url https://pypi.nvidia.com \
+            -r requirements_versions.txt \
+            torch==2.1.2 torchvision==0.16.2 xformers==0.0.23.post1
+        pip cache purge
+
+        if [ "$(uname -m)" = "x86_64" ]; then
+            CC="cc -mavx2" pip install -U --force-reinstall pillow-simd
+        fi
+    fi
+}
+
+handle_sigint() {
+    kill -SIGINT $python_pid
+    wait $python_pid
+
+    echo "WebUI stopped. Correcting user data permissions..."
+    chmod -R 775 /data || true
+    exit 0
+}
+
+ln_scripts
+create_ui_config
+data_dir_fallback
+install_requirements
+
+trap handle_sigint INT
+
+echo "Starting WebUI with arguments: $*"
+python3 /app/launch.py --listen --port 7860 --data-dir /data "$@" &
+
+python_pid=$!
+wait $python_pid
