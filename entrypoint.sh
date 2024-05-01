@@ -42,7 +42,7 @@ install_requirements() {
 }
 
 handle_sigint() {
-    kill -SIGINT $python_pid
+    kill -s INT $python_pid
     wait $python_pid
 
     echo "WebUI stopped. Correcting user data permissions..."
