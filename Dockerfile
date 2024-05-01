@@ -138,7 +138,18 @@ COPY --link --chown=$UID:0 --chmod=775 <<"EOF" /entrypoint.sh
 #!/bin/sh
 
 # Copy scripts to /app/scripts
-cp -rfs /data/scripts/. /app/scripts/
+ln -sf /data/scripts/* /app/scripts
+
+# Create an empty config file if not exists
+if [ ! -f /data/ui-config.json ]; then \
+    echo "{}" > /data/ui-config.json
+fi
+
+# Bind the following to the script folder to fix some extensions that do not respect the --data-dir.
+ln -sf /data/ui-config.json /app/ui-config.json
+ln -sf /data/config_states/* /app/config_states
+ln -sf /data/extensions/* /app/extensions
+ln -sf /data/models/* /app/models
 
 # Install requirements if no torch
 if [ -z "$(pip show torch 2>/dev/null | grep Name)" ]; then \
@@ -167,8 +178,6 @@ python3 /app/launch.py --listen --port 7860 --data-dir /data "$@"
 EOF
 
 # Copy dependencies and code
-ARG UID
-ARG SKIP_REQUIREMENTS_INSTALL
 COPY --link --chown=$UID:0 --chmod=775 --from=build /root/.local /home/$UID/.local
 COPY --link --chown=$UID:0 --chmod=775 stable-diffusion-webui /app
 

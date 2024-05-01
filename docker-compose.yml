@@ -48,14 +48,6 @@ services:
       - cache:/.cache
       - repositories:/app/repositories
       - ./data:/data
-      # Bind the following to the script folder to fix some extensions that do not respect the --data-dir.
-      - ./data/config_states:/app/config_states
-      - ./data/extensions:/app/extensions
-      - ./data/models:/app/models
-      # Using the long syntax requires the referenced file/folder to be created beforehand.
-      - type: bind
-        source: ./data/ui-config.json
-        target: /app/ui-config.json
     deploy:
       resources:
         reservations:
