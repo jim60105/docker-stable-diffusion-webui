@@ -71,6 +71,7 @@ Docker image tag 對應於 [AUTOMATIC1111/stable-diffusion-webui](https://github
 | v1.6.1       | [AUTOMATIC1111/stable-diffusion-webui v1.6.1 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.6.1)      |
 | v1.7.0       | [AUTOMATIC1111/stable-diffusion-webui v1.7.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.7.0)      |
 | v1.8.0       | [AUTOMATIC1111/stable-diffusion-webui v1.8.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.8.0)      |
+| v1.9.3       | [AUTOMATIC1111/stable-diffusion-webui v1.9.3 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.9.3)      |
 
 你可以在 [ghcr.io](https://github.com/jim60105/docker-stable-diffusion-webui/pkgs/container/stable-diffusion-webui) 查看所有可用的標籤。
 
@@ -109,13 +110,26 @@ docker compose -f docker-compose.forge.yml up -d
 > 請先停止運行中的服務再啟動另一個服務。  
 > ![image](https://github.com/jim60105/docker-stable-diffusion-webui/assets/16995691/f7aecb66-5416-4806-90d8-b6c6be6c1bad)
 
+### `runtime-deps` 版本
+
+其中有些版本有 `runtime-deps` 映像，例如 `v1.8.0-runtime-deps`、`v1.9.3-runtime-deps` 和 `forge-runtime-deps`。
+
+`runtime-deps` 映像中不包含 pip 套件依賴，相反地，它們將在首次啟動時進行下載和安裝。
+
+這讓我能把映像尺寸縮得更小， **1.3GB**！
+
+其缺點是第一次啟動時需要等待一段時間，且套件無法取得的話也會導致失敗。
+
+若這正好符合你的需求，請考慮使用它們。
+
+> [!NOTE]  
+> 你可以使用以下建置參數來建置它: `SKIP_REQUIREMENTS_INSTALL=true`
+
 ## 🛠️ 建置指南
 
 > [!IMPORTANT]  
 > Git clone 儲存庫時使用 ***--recursive*** 來包含子模組：  
 > `git clone --recursive https://github.com/jim60105/docker-stable-diffusion-webui.git`
-
-取消註解 [`docker-compose.yml` 中的 `# build: .`](https://github.com/jim60105/docker-stable-diffusion-webui/blob/bc23c16b99034147c74ab901ae7f605d5d9fc21c/docker-compose.yml#L7)，然後使用以下指令建置映像。
 
 ```bash
 docker compose up -d --build
