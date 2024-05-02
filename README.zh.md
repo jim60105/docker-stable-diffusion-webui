@@ -14,7 +14,7 @@
 
 又一個來自社群的 [AUTOMATIC1111/Stable Diffusion web UI](https://github.com/AUTOMATIC1111/stable-diffusion-webui) Docker 映像。
 
-這個映像的主要設計理念是保持 ***小巧而簡單***，並符合 Dockerfile 最佳實踐。成功地將大小控制在約 **10 GB** 左右，相比其他現有的儲存庫節省了大約 **1/3** 的容量。
+這個映像的主要設計理念是保持 ***小巧並遵循最佳實踐***。成功地將大小控制在約 **10 GB** 左右，相比其他現有的解決方案節省了大約 **1/3** 的容量。
 
 這個尺寸使我能夠在 GitHub free runner 上以 [CI workflow](https://github.com/jim60105/docker-stable-diffusion-webui/actions/workflows/docker_publish.yml) 持續地自動化建置 docker 映像。你可以從 ghcr 上拉取我[預先建置的映像](https://ghcr.io/jim60105/stable-diffusion-webui)，而不必自己在本地建置以節省時間！
 

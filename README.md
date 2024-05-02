@@ -14,7 +14,7 @@
 
 Yet another docker image for [AUTOMATIC1111/Stable Diffusion web UI: A web interface for Stable Diffusion, implemented using Gradio library.](https://github.com/AUTOMATIC1111/stable-diffusion-webui) from the community.
 
-The main objective behind the design of this image is to keep it ***small and simple*** and conforms to Dockerfile best practices. Successfully controlled the size to around **10GB**, saving approximately **1/3** of the capacity compared to other existing repos.
+The main goal of designing this image is to keep it ***small and follow best practices***. Successfully controlled the size to around **10GB**, saving approximately **1/3** of the capacity compared to other existing solutions.
 
 This makes it possible for me to consistently automate building images by using the [CI workflow](https://github.com/jim60105/docker-stable-diffusion-webui/actions/workflows/docker_publish.yml) on GitHub free runner. You can pull the [pre-built images](https://ghcr.io/jim60105/stable-diffusion-webui) from ghcr, saving time instead of constructing them yourself!
 
