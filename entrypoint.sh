@@ -44,14 +44,18 @@ install_requirements() {
     fi
 }
 
+correct_permissions() {
+    echo "Correcting user data permissions... Please wait a second."
+    chmod -R 775 /data 2>/dev/null
+    echo "Done."
+}
+
 handle_sigint() {
     kill -s INT $python_pid
     wait $python_pid
 
     echo "WebUI stopped."
-    echo "Correcting user data permissions... Please wait a second."
-    chmod -R 775 /data 2>/dev/null
-    echo "Done. Exiting"
+    correct_permissions
     exit 0
 }
 
@@ -64,6 +68,8 @@ trap handle_sigint INT
 
 echo "Starting WebUI with arguments: $*"
 python3 /app/launch.py --listen --port 7860 --data-dir /data "$@" &
-
 python_pid=$!
 wait $python_pid
+
+echo "WebUI stopped."
+correct_permissions
