@@ -4,7 +4,7 @@ services:
       file: docker-compose.yml
       service: stable-diffusion-webui
     container_name: stable-diffusion-webui-forge
-    image: ghcr.io/jim60105/stable-diffusion-webui:forge
+    image: ghcr.io/jim60105/stable-diffusion-webui:forge-runtime-deps
     command:
       # https://github.com/lllyasviel/stable-diffusion-webui-forge/blob/main/modules/cmd_args.py
       #
@@ -28,9 +28,9 @@ services:
       - --opt-channelslast
       #
       ## Debug logging
-      # - --loglevel
-      # - DEBUG
-      # - --log-startup
+      - --loglevel
+      - DEBUG
+      - --log-startup
       #
       ## Forge Backend
       ##! Start the container once and check the logs.
@@ -41,10 +41,11 @@ services:
       ### This flag will make things slower but less risky
       # - --always-offload-from-vram
       ### These flags will make things faster but more risky
-      # - --cuda-malloc
-      # - --cuda-stream
+      - --cuda-malloc
+      - --cuda-stream
       # - --pin-shared-memory
 
 volumes:
   cache:
   repositories:
+  local:
