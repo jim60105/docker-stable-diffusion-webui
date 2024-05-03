@@ -112,19 +112,24 @@ docker compose -f docker-compose.forge.yml up -d
 
 ### `runtime-deps` images
 
-Some versions also have `runtime-deps` images that you can use, like `v1.8.0-runtime-deps`, `v1.9.3-runtime-deps`, and `forge-runtime-deps`.
+> [!NOTE]  
+> You can build it locally with Docker build arguments: `SKIP_REQUIREMENTS_INSTALL=true`
 
-The `runtime-deps` image does not include pre-installed pip requirements.  
-Instead, the requirements will be installed when the image is first launched.
+Some recent versions have `runtime-deps` images that you can use, like `v1.8.0-runtime-deps`, `v1.9.3-runtime-deps`, and `forge-runtime-deps`.
 
-This leads to a smaller image size of **1.3GB**!
+These images does not include pre-installed pip requirements.  
+Instead, the requirements will be installed during the image first launch.
 
-On the downside, the initial startup process may take some time and could fail if the necessary packages are not accessible.
+The initial startup process may take some time, but this leads to a smaller image size of **1.3GB**!
 
 Consider using them if they fit your needs.
 
-> [!NOTE]  
-> You can build it locally with Docker build arguments: `SKIP_REQUIREMENTS_INSTALL=true`
+> [!TIP]  
+> This image can be used in a tricky way: to preserve and reuse the `/home/1001/.local` directory through a volume.  
+> It's like sharing the same environment across different Python applications.  
+> I wouldn't recommend this approach for regular users... you must be fully aware of what you're doing.  
+> As for power users, please refer to [this commit](https://github.com/jim60105/docker-stable-diffusion-webui/commit/0434e831fc4a4c15d17c4f86c822def096160e33) for more information.  
+> Thanks to the community for coming up with this amazing idea!😆
 
 ## 🛠️ Build instructions
 

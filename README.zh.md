@@ -112,18 +112,23 @@ docker compose -f docker-compose.forge.yml up -d
 
 ### `runtime-deps` 版本
 
-其中有些版本有 `runtime-deps` 映像，例如 `v1.8.0-runtime-deps`、`v1.9.3-runtime-deps` 和 `forge-runtime-deps`。
-
-`runtime-deps` 映像中不包含 pip 套件依賴，相反地，它們將在首次啟動時進行下載和安裝。
-
-這讓我能把映像尺寸縮得更小， **1.3GB**！
-
-其缺點是第一次啟動時需要等待一段時間，且套件無法取得的話也會導致失敗。
-
-若這正好符合你的需求，請考慮使用它們。
-
 > [!NOTE]  
 > 你可以使用以下建置參數來建置它: `SKIP_REQUIREMENTS_INSTALL=true`
+
+在一些近期的版本會有 `runtime-deps` 映像可供選擇，例如 `v1.8.0-runtime-deps`、`v1.9.3-runtime-deps` 和 `forge-runtime-deps`。
+
+這些映像中不包含 pip 套件依賴，相反地，它們將在首次啟動時進行下載和安裝。
+
+第一次啟動時需要等待一段時間，但這能讓我把映像縮小至 **1.3GB**！
+
+如果這符合您的需求，可以考慮使用它們。
+
+> [!TIP]  
+> 它有一個特殊的使用方式： 透過 volume 保存並重複利用 `/home/1001/.local` 資料夾。  
+> 這就像是在不同的 Python 應用程式之間共用同一個環境。  
+> 我不推薦一般使用者採用這種方法...你必須完全清楚自己在做什麼。  
+> 對於進階使用者，請參考[這個 commit](https://github.com/jim60105/docker-stable-diffusion-webui/commit/0434e831fc4a4c15d17c4f86c822def096160e33) 以查看更多資訊。  
+> 感謝社群提出這個驚人的想法！😆
 
 ## 🛠️ 建置指南
 
