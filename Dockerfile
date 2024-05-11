@@ -122,6 +122,9 @@ RUN install -d -m 775 -o $UID -g 0 ${CACHE_HOME} && \
     install -d -m 775 -o $UID -g 0 /.config && \
     chown -R $UID:0 /home/$UID && chmod -R g=u /home/$UID
 
+# curl for healthcheck
+COPY --link --from=ghcr.io/tarampampam/curl:8.7.1 /bin/curl /usr/local/bin/
+
 # ffmpeg
 COPY --link --from=mwader/static-ffmpeg:7.0-1 /ffmpeg /usr/local/bin/
 COPY --link --from=mwader/static-ffmpeg:7.0-1 /ffprobe /usr/local/bin/
@@ -155,6 +158,9 @@ EXPOSE 7860
 USER $UID
 
 STOPSIGNAL SIGINT
+
+HEALTHCHECK --interval=30s --timeout=2s --start-period=30s \
+    CMD [ "curl", "--fail", "http://localhost:7860/" ]
 
 # Use dumb-init as PID 1 to handle signals properly
 ENTRYPOINT [ "dumb-init", "--", "/entrypoint.sh" ]
