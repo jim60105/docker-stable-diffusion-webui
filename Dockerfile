@@ -30,8 +30,7 @@ RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/v
     # https://pillow.readthedocs.io/en/stable/installation/building-from-source.html
     libjpeg62-turbo-dev libwebp-dev zlib1g-dev \
     libgl1 libglib2.0-0 libgoogle-perftools-dev \
-    git libglfw3-dev libgles2-mesa-dev pkg-config libcairo2 build-essential \
-    dumb-init
+    git libglfw3-dev libgles2-mesa-dev pkg-config libcairo2 build-essential
 
 ########################################
 # Build stage
@@ -126,8 +125,11 @@ RUN install -d -m 775 -o $UID -g 0 ${CACHE_HOME} && \
 COPY --link --from=ghcr.io/tarampampam/curl:8.7.1 /bin/curl /usr/local/bin/
 
 # ffmpeg
-COPY --link --from=mwader/static-ffmpeg:7.0-1 /ffmpeg /usr/local/bin/
-COPY --link --from=mwader/static-ffmpeg:7.0-1 /ffprobe /usr/local/bin/
+COPY --link --from=ghcr.io/jim60105/static-ffmpeg-upx:7.0-1 /ffmpeg /usr/local/bin/
+COPY --link --from=ghcr.io/jim60105/static-ffmpeg-upx:7.0-1 /ffprobe /usr/local/bin/
+
+# dumb-init
+COPY --link --from=ghcr.io/jim60105/static-ffmpeg-upx:7.0-1 /dumb-init /usr/bin/
 
 # Copy licenses (OpenShift Policy)
 COPY --link --chown=$UID:0 --chmod=775 LICENSE /licenses/Dockerfile.LICENSE
