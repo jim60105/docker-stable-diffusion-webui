@@ -77,12 +77,12 @@ Docker image tag 對應於 [AUTOMATIC1111/stable-diffusion-webui](https://github
 
 ### 指定 docker-compose.yml 中的映像標籤
 
-修改 [`docker-compose.yml` 中的 `image` 欄位](https://github.com/jim60105/docker-stable-diffusion-webui/blob/f41cfe8458a3b66d8cbdeff14284bbcd91b73959/docker-compose.yml#L7)，將 `ghcr.io/jim60105/stable-diffusion-webui` 後面的標籤改為你想要的版本。
+修改 [`docker-compose.yml` 中的 `image` 欄位](https://github.com/jim60105/docker-stable-diffusion-webui/blob/75e84ec718572b793a8cf20f198a2ddd066a7bc2/docker-compose.yml#L4)，將 `ghcr.io/jim60105/stable-diffusion-webui` 後面的標籤改為你想要的版本。
 
-舉例來說，若你想要使用 `v1.7.0` 版本，你應該修改成:
+舉例來說，若你想要使用 `v1.8.0` 版本，你應該修改成:
 
 ```yml
-image: ghcr.io/jim60105/stable-diffusion-webui:v1.7.0
+image: ghcr.io/jim60105/stable-diffusion-webui:v1.8.0
 ```
 
 然後使用以下指令重新啟動服務:
@@ -127,7 +127,7 @@ docker compose -f docker-compose.forge.yml up -d
 > 它有一個特殊的使用方式： 透過 volume 保存並重複利用 `/home/1001/.local` 資料夾。  
 > 這就像是在不同的 Python 應用程式之間共用同一個環境。  
 > 我不推薦一般使用者採用這種方法...你必須完全清楚自己在做什麼。  
-> 對於進階使用者，請參考[這個 commit](https://github.com/jim60105/docker-stable-diffusion-webui/commit/0434e831fc4a4c15d17c4f86c822def096160e33) 以查看更多資訊。  
+> 對於進階使用者，請參考[這個 commit](https://github.com/jim60105/docker-stable-diffusion-webui/commit/c46ddadee56c0afe0fc71cf1157ad4a6f3eefe65) 以查看更多資訊。  
 > 感謝社群提出這個驚人的想法！😆
 
 ## 🛠️ 建置指南
@@ -164,14 +164,14 @@ docker compose up -d --build
 
 2. 將 `config.json` 放置在 `data` 目錄下。
 3. 將模型和其他現有資料放入 `data` 目錄下相應的資料夾中。
-4. ***若這些文件來自於 Linux 系統(你之前使用 WSL 或 Linux)，請修正 `data` 資料夾中所有文件的權限。***
+4. ***請修正 `data` 資料夾中所有文件的權限。***
 
    ```sh
-   chown -R 1001:0 ./data && chmod -R 775 ./data
+   docker run -v ".:/app" -it busybox sh -c "chown -R 1001:0 /app/data && chmod -R 775 /app/data"
    ```
 
 > [!NOTE]  
-> 這個指令修改了 `data` 目錄的擁有者群組為 ***0(root group)***，並授予了 ***群組寫入權限***。這符合 OpenShift 最佳實踐的 ***支援以任意 uid 運行***。
+> 這個指令使用 busybox 修改了 `data` 目錄的擁有者群組為 ***0 (root group)***，並授予了 ***群組寫入權限***。這符合 OpenShift 最佳實踐的 ***支援以任意 uid 運行***。
 
 > [!WARNING]  
 > 這個映像遵循最佳實踐，***使用非 root 用戶運行*** 並 ***限制非必要路徑的寫入權限***。除非進行了適當的修改，否則你可能無法將文件儲存在 `/data` 路徑之外。

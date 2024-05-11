@@ -77,12 +77,12 @@ You can check all available tags at [ghcr.io](https://github.com/jim60105/docker
 
 ### Specify the image in the docker-compose.yml
 
-Change the tag after `ghcr.io/jim60105/stable-diffusion-webui` in the [`image` field of `docker-compose.yml`](https://github.com/jim60105/docker-stable-diffusion-webui/blob/f41cfe8458a3b66d8cbdeff14284bbcd91b73959/docker-compose.yml#L7) to your desired version.
+Change the tag after `ghcr.io/jim60105/stable-diffusion-webui` in the [`image` field of `docker-compose.yml`](https://github.com/jim60105/docker-stable-diffusion-webui/blob/75e84ec718572b793a8cf20f198a2ddd066a7bc2/docker-compose.yml#L4) to your desired version.
 
-For example, if you want to use the `v1.7.0` version, you should modify it to:
+For example, if you want to use the `v1.8.0` version, you should modify it to:
 
 ```yml
-image: ghcr.io/jim60105/stable-diffusion-webui:v1.7.0
+image: ghcr.io/jim60105/stable-diffusion-webui:v1.8.0
 ```
 
 Then restart the service using the following command:
@@ -128,7 +128,7 @@ Consider using them if they fit your needs.
 > This image can be used in a tricky way: to preserve and reuse the `/home/1001/.local` directory through a volume.  
 > It's like sharing the same environment across different Python applications.  
 > I wouldn't recommend this approach for regular users... you must be fully aware of what you're doing.  
-> As for power users, please refer to [this commit](https://github.com/jim60105/docker-stable-diffusion-webui/commit/0434e831fc4a4c15d17c4f86c822def096160e33) for more information.  
+> As for power users, please refer to [this commit](https://github.com/jim60105/docker-stable-diffusion-webui/commit/c46ddadee56c0afe0fc71cf1157ad4a6f3eefe65) for more information.  
 > Thanks to the community for coming up with this amazing idea!😆
 
 ## 🛠️ Build instructions
