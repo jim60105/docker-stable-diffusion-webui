@@ -28,9 +28,9 @@ services:
       - --opt-channelslast
       #
       ## Debug logging
-      # - --loglevel
-      # - DEBUG
-      # - --log-startup
+      - --loglevel
+      - DEBUG
+      - --log-startup
       #
       ## Forge Backend
       ##! Start the container once and check the logs.
@@ -41,8 +41,8 @@ services:
       ### This flag will make things slower but less risky
       # - --always-offload-from-vram
       ### These flags will make things faster but more risky
-      # - --cuda-malloc
-      # - --cuda-stream
+      - --cuda-malloc
+      - --cuda-stream
       # - --pin-shared-memory
 
 volumes:
