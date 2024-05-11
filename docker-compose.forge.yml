@@ -15,9 +15,11 @@ services:
       - --xformers
       - --api
       - --allow-code
+      #
       # You may or may not need:
       ## Enable installing/modifying extensions from the UI, please pay attention to security considerations.
       - --enable-insecure-extension-access 
+      #
       ## Optimizations
       ## https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Optimizations
       - --opt-sdp-attention
@@ -25,14 +27,23 @@ services:
       - --opt-split-attention
       - --opt-channelslast
       #
-      # Forge Backend
-      # !! Start this service once and check the logs. Forge will advise you on which optimization flags to add depending on your graphics card. !!
-      # https://github.com/lllyasviel/stable-diffusion-webui-forge?tab=readme-ov-file#forge-backend
-      # https://github.com/lllyasviel/stable-diffusion-webui-forge/blob/main/ldm_patched/modules/args_parser.py
+      ## Debug logging
+      # - --loglevel
+      # - DEBUG
+      # - --log-startup
       #
-      # - --pin-shared-memory
+      ## Forge Backend
+      ##! Start the container once and check the logs.
+      ##! Forge will advise you on which optimization flags to add depending on your graphics card.
+      ## https://github.com/lllyasviel/stable-diffusion-webui-forge?tab=readme-ov-file#forge-backend
+      ## https://github.com/lllyasviel/stable-diffusion-webui-forge/blob/main/ldm_patched/modules/args_parser.py
+      ##
+      ### This flag will make things slower but less risky
+      # - --always-offload-from-vram
+      ### These flags will make things faster but more risky
       # - --cuda-malloc
       # - --cuda-stream
+      # - --pin-shared-memory
 
 volumes:
   cache:

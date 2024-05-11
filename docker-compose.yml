@@ -25,16 +25,24 @@ services:
       - --api
       - --allow-code
       - --no-half-vae
+      #
       # You may or may not need:
       ## Enable installing/modifying extensions from the UI, please pay attention to security considerations.
       - --enable-insecure-extension-access
+      #
       ## Optimizations
       ## https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Optimizations
-      - --medvram
+      # - --lowvram
+      # - --medvram
       - --opt-sdp-attention
       - --opt-sdp-no-mem-attention
       - --opt-split-attention
       - --opt-channelslast
+      #
+      ## Debug logging
+      # - --loglevel
+      # - DEBUG
+      # - --log-startup
     ports:
       - 7860:7860
     environment:
