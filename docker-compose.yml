@@ -40,9 +40,9 @@ services:
       - --opt-channelslast
       #
       ## Debug logging
-      # - --loglevel
-      # - DEBUG
-      # - --log-startup
+      - --loglevel
+      - DEBUG
+      - --log-startup
     ports:
       - 7860:7860
     environment:
