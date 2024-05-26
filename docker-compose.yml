@@ -62,7 +62,7 @@ services:
           devices:
             - driver: nvidia
               capabilities: [gpu]
-              device_ids: ["all"]
+              count: all
 
 volumes:
   cache:
