@@ -57,7 +57,7 @@ ARG PIP_DISABLE_PIP_VERSION_CHECK="true"
 # Install big packages
 # hadolint ignore=SC2102
 RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \
-    pip install -U --force-reinstall pip setuptools wheel && \
+    pip install -U --force-reinstall pip setuptools==69.5.1 wheel && \
     pip install -U --extra-index-url https://download.pytorch.org/whl/cu121 --extra-index-url https://pypi.nvidia.com \
     # `torch` (3.6G) and the underlying package `triton` (276M), `torchvision` is small but install together
     torch==2.1.2 torchvision==0.16.2 \
