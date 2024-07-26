@@ -1,7 +1,7 @@
 services:
   stable-diffusion-webui:
     container_name: stable-diffusion-webui
-    image: ghcr.io/jim60105/stable-diffusion-webui:v1.9.3
+    image: ghcr.io/jim60105/stable-diffusion-webui:v1.9.4
     user: "1001:0"
     build:
       context: .

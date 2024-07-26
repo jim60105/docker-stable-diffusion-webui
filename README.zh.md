@@ -71,7 +71,7 @@ Docker image tag 對應於 [AUTOMATIC1111/stable-diffusion-webui](https://github
 | v1.6.1       | [AUTOMATIC1111/stable-diffusion-webui v1.6.1 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.6.1) |
 | v1.7.0       | [AUTOMATIC1111/stable-diffusion-webui v1.7.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.7.0) |
 | v1.8.0       | [AUTOMATIC1111/stable-diffusion-webui v1.8.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.8.0) |
-| v1.9.3       | [AUTOMATIC1111/stable-diffusion-webui v1.9.3 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.9.3) |
+| v1.9.4       | [AUTOMATIC1111/stable-diffusion-webui v1.9.4 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.9.4) |
 
 你可以在 [ghcr.io](https://github.com/jim60105/docker-stable-diffusion-webui/pkgs/container/stable-diffusion-webui) 查看所有可用的標籤。
 
@@ -116,7 +116,7 @@ docker compose -f docker-compose.forge.yml up -d
 > [!NOTE]  
 > 你可以使用以下建置參數來建置它: `SKIP_REQUIREMENTS_INSTALL=true`
 
-在一些近期的版本會有 `runtime-deps` 映像可供選擇，例如 `v1.8.0-runtime-deps`、`v1.9.3-runtime-deps` 和 `forge-runtime-deps`。
+在一些近期的版本會有 `runtime-deps` 映像可供選擇，例如 `v1.8.0-runtime-deps`、`v1.9.4-runtime-deps` 和 `forge-runtime-deps`。
 
 這些映像中不包含 pip 套件依賴，相反地，它們將在首次啟動時進行下載和安裝。
 

@@ -71,7 +71,7 @@ The docker image tag corresponds to the non-RC version number from `v1.6.1` and 
 | v1.6.1       | [AUTOMATIC1111/stable-diffusion-webui v1.6.1 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.6.1) |
 | v1.7.0       | [AUTOMATIC1111/stable-diffusion-webui v1.7.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.7.0) |
 | v1.8.0       | [AUTOMATIC1111/stable-diffusion-webui v1.8.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.8.0) |
-| v1.9.3       | [AUTOMATIC1111/stable-diffusion-webui v1.9.3 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.9.3) |
+| v1.9.4       | [AUTOMATIC1111/stable-diffusion-webui v1.9.4 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.9.4) |
 
 You can check all available tags at [ghcr.io](https://github.com/jim60105/docker-stable-diffusion-webui/pkgs/container/stable-diffusion-webui).
 
@@ -116,7 +116,7 @@ docker compose -f docker-compose.forge.yml up -d
 > [!NOTE]  
 > You can build it locally with Docker build arguments: `SKIP_REQUIREMENTS_INSTALL=true`
 
-Some recent versions have `runtime-deps` images that you can use, like `v1.8.0-runtime-deps`, `v1.9.3-runtime-deps`, and `forge-runtime-deps`.
+Some recent versions have `runtime-deps` images that you can use, like `v1.8.0-runtime-deps`, `v1.9.4-runtime-deps`, and `forge-runtime-deps`.
 
 These images does not include pre-installed pip requirements.  
 Instead, the requirements will be installed during the image first launch.
