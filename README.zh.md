@@ -65,13 +65,13 @@
 
 Docker image tag 對應於 [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) 從 `v1.6.1` 起的非 RC 版本號和它的 `dev` 分支。`dev` 標籤每週會自動重建以跟上最新的變更。
 
-| Image tag    | Code version                                                                                                                |
-|--------------|-----------------------------------------------------------------------------------------------------------------------------|
-| dev (latest) | [AUTOMATIC1111/stable-diffusion-webui dev branch](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/dev)         |
-| v1.6.1       | [AUTOMATIC1111/stable-diffusion-webui v1.6.1 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.6.1)      |
-| v1.7.0       | [AUTOMATIC1111/stable-diffusion-webui v1.7.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.7.0)      |
-| v1.8.0       | [AUTOMATIC1111/stable-diffusion-webui v1.8.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.8.0)      |
-| v1.9.3       | [AUTOMATIC1111/stable-diffusion-webui v1.9.3 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.9.3)      |
+| Image tag    | Code version                                                                                                           |
+|--------------|------------------------------------------------------------------------------------------------------------------------|
+| dev (latest) | [AUTOMATIC1111/stable-diffusion-webui dev branch](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/dev)    |
+| v1.6.1       | [AUTOMATIC1111/stable-diffusion-webui v1.6.1 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.6.1) |
+| v1.7.0       | [AUTOMATIC1111/stable-diffusion-webui v1.7.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.7.0) |
+| v1.8.0       | [AUTOMATIC1111/stable-diffusion-webui v1.8.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.8.0) |
+| v1.9.3       | [AUTOMATIC1111/stable-diffusion-webui v1.9.3 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.9.3) |
 
 你可以在 [ghcr.io](https://github.com/jim60105/docker-stable-diffusion-webui/pkgs/container/stable-diffusion-webui) 查看所有可用的標籤。
 
@@ -95,9 +95,10 @@ docker compose down && docker compose up -d
 
 有一個特殊版本 `forge`，它是基於 [lllyasviel/stable-diffusion-webui-forge](https://github.com/lllyasviel/stable-diffusion-webui-forge) 的 `main` 分支。`forge` 標籤每週會自動重建以跟上最新的變更。
 
-| Image tag | Code version                                                                                                                |
-|-----------|-----------------------------------------------------------------------------------------------------------------------------|
-| forge     | [lllyasviel/stable-diffusion-webui-forge main branch](https://github.com/lllyasviel/stable-diffusion-webui-forge/tree/main) |
+| Image tag      | Code version                                                                                                                     |
+|----------------|----------------------------------------------------------------------------------------------------------------------------------|
+| forge          | [lllyasviel/stable-diffusion-webui-forge main branch](https://github.com/lllyasviel/stable-diffusion-webui-forge/tree/main)      |
+| forge-previous | [lllyasviel/stable-diffusion-webui-forge previous tag](https://github.com/lllyasviel/stable-diffusion-webui-forge/tree/previous) |
 
 請透過 `docker-compose.forge.yml` 使用它。
 
