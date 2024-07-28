@@ -72,7 +72,7 @@ Docker image tag 對應於 [AUTOMATIC1111/stable-diffusion-webui](https://github
 | v1.7.0       | [AUTOMATIC1111/stable-diffusion-webui v1.7.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.7.0)   |
 | v1.8.0       | [AUTOMATIC1111/stable-diffusion-webui v1.8.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.8.0)   |
 | v1.9.4       | [AUTOMATIC1111/stable-diffusion-webui v1.9.4 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.9.4)   |
-| v1.10.0      | [AUTOMATIC1111/stable-diffusion-webui v1.10.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.10.0) |
+| v1.10.1      | [AUTOMATIC1111/stable-diffusion-webui v1.10.1 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.10.1) |
 
 你可以在 [ghcr.io](https://github.com/jim60105/docker-stable-diffusion-webui/pkgs/container/stable-diffusion-webui) 查看所有可用的標籤。
 
