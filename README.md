@@ -65,13 +65,14 @@ Output images will be stored at directory `./data/output` for default.
 
 The docker image tag corresponds to the non-RC version number from `v1.6.1` and its `dev` branch in [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui). The `dev` image rebuilds weekly to keep up with the latest changes.
 
-| Image tag    | Code version                                                                                                           |
-|--------------|------------------------------------------------------------------------------------------------------------------------|
-| dev (latest) | [AUTOMATIC1111/stable-diffusion-webui dev branch](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/dev)    |
-| v1.6.1       | [AUTOMATIC1111/stable-diffusion-webui v1.6.1 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.6.1) |
-| v1.7.0       | [AUTOMATIC1111/stable-diffusion-webui v1.7.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.7.0) |
-| v1.8.0       | [AUTOMATIC1111/stable-diffusion-webui v1.8.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.8.0) |
-| v1.9.4       | [AUTOMATIC1111/stable-diffusion-webui v1.9.4 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.9.4) |
+| Image tag    | Code version                                                                                                             |
+|--------------|--------------------------------------------------------------------------------------------------------------------------|
+| dev (latest) | [AUTOMATIC1111/stable-diffusion-webui dev branch](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/dev)      |
+| v1.6.1       | [AUTOMATIC1111/stable-diffusion-webui v1.6.1 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.6.1)   |
+| v1.7.0       | [AUTOMATIC1111/stable-diffusion-webui v1.7.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.7.0)   |
+| v1.8.0       | [AUTOMATIC1111/stable-diffusion-webui v1.8.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.8.0)   |
+| v1.9.4       | [AUTOMATIC1111/stable-diffusion-webui v1.9.4 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.9.4)   |
+| v1.10.0      | [AUTOMATIC1111/stable-diffusion-webui v1.10.0 tag](https://github.com/AUTOMATIC1111/stable-diffusion-webui/tree/v1.10.0) |
 
 You can check all available tags at [ghcr.io](https://github.com/jim60105/docker-stable-diffusion-webui/pkgs/container/stable-diffusion-webui).
 
