@@ -60,9 +60,9 @@ RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/r
     pip install -U --force-reinstall pip setuptools==69.5.1 wheel && \
     pip install -U --extra-index-url https://download.pytorch.org/whl/cu121 --extra-index-url https://pypi.nvidia.com \
     # `torch` (3.6G) and the underlying package `triton` (276M), `torchvision` is small but install together
-    torch==2.1.2 torchvision==0.16.2 \
+    torch==2.3.1 torchvision==0.18.1 \
     # `xformers` (471M)
-    xformers==0.0.23.post1
+    xformers==0.0.27
 
 # Install requirements
 RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \

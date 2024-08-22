@@ -35,7 +35,7 @@ install_requirements() {
             --extra-index-url https://download.pytorch.org/whl/cu121 \
             --extra-index-url https://pypi.nvidia.com \
             -r requirements_versions.txt \
-            torch==2.1.2 torchvision==0.16.2 xformers==0.0.23.post1
+            torch==2.3.1 torchvision==0.18.1 xformers==0.0.27
         pip cache purge
 
         if [ "$(uname -m)" = "x86_64" ]; then
@@ -67,7 +67,7 @@ install_requirements
 trap handle_sigint INT
 
 echo "Starting WebUI with arguments: $*"
-python3 /app/launch.py --listen --port 7860 --data-dir /data "$@" &
+python3 /app/launch.py --listen --port 7860 --data-dir /data --gradio-allowed-path "." "$@" &
 python_pid=$!
 wait $python_pid
 
