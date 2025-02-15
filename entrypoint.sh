@@ -31,11 +31,10 @@ install_requirements() {
     if ! pip show torch 2>/dev/null | grep -q Name; then
         echo "Installing torch and related packages... (This will only run once and might take some time)"
         pip install -U --force-reinstall pip setuptools==69.5.1 wheel
-        pip install -U \
-            --extra-index-url https://download.pytorch.org/whl/cu121 \
-            --extra-index-url https://pypi.nvidia.com \
-            -r requirements_versions.txt \
-            torch==2.3.1 torchvision==0.18.1 xformers==0.0.27
+        pip install -U --extra-index-url https://download.pytorch.org/whl/nightly/cu128 --extra-index-url https://pypi.nvidia.com \
+            --pre \
+            torch torchvision \
+            xformers==0.0.29.post2
         pip cache purge
 
         if [ "$(uname -m)" = "x86_64" ]; then
