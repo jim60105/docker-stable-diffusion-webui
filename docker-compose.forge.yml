@@ -11,7 +11,7 @@ services:
       # Already configured in the entrypoint and should remain unchanged!!
       # --listen --port 7860 --data-dir /data
       #
-      # Recommanded:
+      # Recommended:
       - --xformers
       - --api
       - --allow-code
