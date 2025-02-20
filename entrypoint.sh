@@ -33,8 +33,7 @@ install_requirements() {
         pip install -U --force-reinstall pip setuptools==69.5.1 wheel
         pip install -U --extra-index-url https://download.pytorch.org/whl/nightly/cu128 --extra-index-url https://pypi.nvidia.com \
             --pre \
-            torch torchvision \
-            xformers==0.0.29.post2
+            torch torchvision
         pip cache purge
 
         if [ "$(uname -m)" = "x86_64" ]; then

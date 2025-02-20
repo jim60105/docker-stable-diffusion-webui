@@ -61,9 +61,7 @@ RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/r
     pip install -U --extra-index-url https://download.pytorch.org/whl/nightly/cu128 --extra-index-url https://pypi.nvidia.com \
     --pre \
     # `torch` (3.6G) and the underlying package `triton` (276M), `torchvision` is small but install together
-    torch torchvision \
-    # `xformers` (471M)
-    xformers==0.0.29.post2
+    torch torchvision
 
 # Install requirements
 RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \
@@ -168,7 +166,7 @@ HEALTHCHECK --interval=30s --timeout=2s --start-period=30s \
 # Use dumb-init as PID 1 to handle signals properly
 ENTRYPOINT [ "dumb-init", "--", "/entrypoint.sh" ]
 
-CMD [ "--xformers", "--api", "--allow-code" ]
+CMD [ "--api", "--allow-code" ]
 
 ARG VERSION
 ARG RELEASE
