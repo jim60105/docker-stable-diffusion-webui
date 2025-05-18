@@ -14,13 +14,11 @@ ARG SKIP_REQUIREMENTS_INSTALL=
 ########################################
 # Base stage
 ########################################
-FROM python:3.10-slim as base
+FROM docker.io/library/python:3.11-slim-bookworm as base
 
 # RUN mount cache for multi-arch: https://github.com/docker/buildx/issues/549#issuecomment-1788297892
 ARG TARGETARCH
 ARG TARGETVARIANT
-
-ENV PIP_USER="true"
 
 # Install runtime/buildtime dependencies
 RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/cache/apt \
@@ -32,13 +30,20 @@ RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/v
     libgl1 libglib2.0-0 libgoogle-perftools-dev \
     git libglfw3-dev libgles2-mesa-dev pkg-config libcairo2 build-essential
 
+# Install UV
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+ENV UV_LINK_MODE=copy
+ENV UV_PYTHON_DOWNLOADS=0
+ENV UV_TORCH_BACKEND=cu128
+
 ########################################
 # Build stage
 ########################################
 FROM base as prepare_build_empty
 
 # An empty directory for final stage
-RUN install -d /root/.local
+RUN install -d /venv
 
 FROM base as prepare_build
 
@@ -48,37 +53,27 @@ ARG TARGETVARIANT
 
 WORKDIR /source
 
-# Install under /root/.local
-ARG PIP_NO_WARN_SCRIPT_LOCATION=0
-ARG PIP_ROOT_USER_ACTION="ignore"
-ARG PIP_NO_COMPILE="true"
-ARG PIP_DISABLE_PIP_VERSION_CHECK="true"
+ENV UV_PROJECT_ENVIRONMENT=/venv
+ENV VIRTUAL_ENV=/venv
+
+RUN --mount=type=cache,id=uv-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/uv \
+    uv venv --system-site-packages /venv && \
+    uv pip install -U --force-reinstall setuptools==69.5.1 wheel
 
 # Install big packages
 # hadolint ignore=SC2102
-RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \
-    pip install -U --force-reinstall pip setuptools==69.5.1 wheel && \
-    pip install -U --extra-index-url https://download.pytorch.org/whl/cu128 --extra-index-url https://pypi.nvidia.com \
+RUN --mount=type=cache,id=uv-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/uv \
+    uv pip install \
+    setuptools==69.5.1 \
     torch==2.7.0 torchvision \
-    xformers==0.0.30
+    xformers==0.0.30 \
+    numpy==1.26.2 \
+    pillow==9.5.0
 
 # Install requirements
-RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \
+RUN --mount=type=cache,id=uv-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/uv \
     --mount=source=stable-diffusion-webui/requirements_versions.txt,target=requirements.txt \
-    pip install -r requirements.txt clip-anytorch
-
-# Replace pillow with pillow-simd (Only for x86)
-ARG TARGETPLATFORM
-RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \
-    if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-    # # WebUI actually installed it back whenever it launches
-    # pip uninstall -y pillow && \
-    CC="cc -mavx2" pip install -U --force-reinstall pillow-simd; \
-    fi
-
-# Cleanup
-RUN find "/root/.local" -name '*.pyc' -print0 | xargs -0 rm -f || true ; \
-    find "/root/.local" -type d -name '__pycache__' -print0 | xargs -0 rm -rf || true ;
+    uv pip install -r requirements.txt clip-anytorch hf_xet
 
 # Select the build stage by the build argument
 FROM prepare_build${SKIP_REQUIREMENTS_INSTALL:+_empty} as build
@@ -123,26 +118,32 @@ RUN install -d -m 775 -o $UID -g 0 ${CACHE_HOME} && \
 COPY --link --from=ghcr.io/tarampampam/curl:8.7.1 /bin/curl /usr/local/bin/
 
 # ffmpeg
-COPY --link --from=ghcr.io/jim60105/static-ffmpeg-upx:7.0-1 /ffmpeg /usr/local/bin/
-COPY --link --from=ghcr.io/jim60105/static-ffmpeg-upx:7.0-1 /ffprobe /usr/local/bin/
+COPY --link --from=ghcr.io/jim60105/static-ffmpeg-upx:7.1.1 /ffmpeg /usr/local/bin/
+COPY --link --from=ghcr.io/jim60105/static-ffmpeg-upx:7.1.1 /ffprobe /usr/local/bin/
 
 # dumb-init
-COPY --link --from=ghcr.io/jim60105/static-ffmpeg-upx:7.0-1 /dumb-init /usr/bin/
+COPY --link --from=ghcr.io/jim60105/static-ffmpeg-upx:7.1.1 /dumb-init /usr/bin/
 
 # Copy licenses (OpenShift Policy)
 COPY --link --chown=$UID:0 --chmod=775 LICENSE /licenses/Dockerfile.LICENSE
 COPY --link --chown=$UID:0 --chmod=775 stable-diffusion-webui/LICENSE.txt /licenses/stable-diffusion-webui.LICENSE.txt
 COPY --link --chown=$UID:0 --chmod=775 stable-diffusion-webui/html/licenses.html /licenses/stable-diffusion-webui-borrowed-code.LICENSE.html
 
+# Setup uv
+ENV UV_PROJECT_ENVIRONMENT=/home/$UID/.local
+ENV VIRTUAL_ENV=/home/$UID/.local
+ENV UV_NO_CACHE=1
+RUN uv venv --system-site-packages /home/$UID/.local
+
 # Copy entrypoint
 COPY --link --chown=$UID:0 --chmod=775 entrypoint.sh /entrypoint.sh
 
 # Copy dependencies and code
-COPY --link --chown=$UID:0 --chmod=775 --from=build /root/.local /home/$UID/.local
+COPY --link --chown=$UID:0 --chmod=775 --from=build /venv /home/$UID/.local
 COPY --link --chown=$UID:0 --chmod=775 stable-diffusion-webui /app
 
-ENV PATH="/app:/home/$UID/.local/bin:$PATH"
-ENV PYTHONPATH="/app:/home/$UID/.local/lib/python3.10/site-packages:$PYTHONPATH"
+ENV PATH="/app:/home/$UID/.local/bin${PATH:+:${PATH}}"
+ENV PYTHONPATH="/app:/home/$UID/.local/lib/python3.11/site-packages${PYTHONPATH:+:${PYTHONPATH}}"
 ENV LD_PRELOAD=libtcmalloc.so
 
 ENV GIT_CONFIG_COUNT=1

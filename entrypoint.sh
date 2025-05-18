@@ -30,16 +30,15 @@ data_dir_fallback() {
 install_requirements() {
     if ! pip show torch 2>/dev/null | grep -q Name; then
         echo "Installing torch and related packages... (This will only run once and might take some time)"
-        pip install -U --force-reinstall pip setuptools==69.5.1 wheel
-        pip install -U --extra-index-url https://download.pytorch.org/whl/nightly/cu128 --extra-index-url https://pypi.nvidia.com \
-            --pre \
-            torch torchvision \
-            xformers==0.0.29.post2
-        pip cache purge
-
-        if [ "$(uname -m)" = "x86_64" ]; then
-            CC="cc -mavx2" pip install -U --force-reinstall pillow-simd
-        fi
+        uv venv --system-site-packages /venv \
+        uv pip install -U \
+            -r requirements_versions.txt \
+            setuptools==69.5.1 \
+            wheel \
+            torch==2.7.0 torchvision \
+            xformers==0.0.30 \
+            numpy==1.26.2 \
+            pillow==9.5.0
     fi
 }
 
@@ -66,7 +65,7 @@ install_requirements
 trap handle_sigint INT
 
 echo "Starting WebUI with arguments: $*"
-python3 /app/launch.py --listen --port 7860 --data-dir /data --gradio-allowed-path "." "$@" &
+python3 /app/launch.py --listen --port 7860 --data-dir /data --gradio-allowed-path "." --uv "$@" &
 python_pid=$!
 wait $python_pid
 
