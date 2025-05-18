@@ -11,10 +11,8 @@ services:
       # Already configured in the entrypoint and should remain unchanged!!
       # --listen --port 7860 --data-dir /data
       #
-      #! xformers is not supported for cu128 (Blackwell Series)
-      # - --xformers
-      #
       # Recommended:
+      - --xformers
       - --api
       - --allow-code
       #
