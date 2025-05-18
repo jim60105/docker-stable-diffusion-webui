@@ -58,12 +58,9 @@ ARG PIP_DISABLE_PIP_VERSION_CHECK="true"
 # hadolint ignore=SC2102
 RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \
     pip install -U --force-reinstall pip setuptools==69.5.1 wheel && \
-    pip install -U --extra-index-url https://download.pytorch.org/whl/nightly/cu128 --extra-index-url https://pypi.nvidia.com \
-    --pre \
-    # `torch` (3.6G) and the underlying package `triton` (276M), `torchvision` is small but install together
-    torch torchvision \
-    # `xformers` (471M)
-    xformers==0.0.29.post2
+    pip install -U --extra-index-url https://download.pytorch.org/whl/cu128 --extra-index-url https://pypi.nvidia.com \
+    torch==2.7.0 torchvision \
+    xformers==0.0.30
 
 # Install requirements
 RUN --mount=type=cache,id=pip-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/pip \
