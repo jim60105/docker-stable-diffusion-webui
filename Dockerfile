@@ -14,7 +14,7 @@ ARG SKIP_REQUIREMENTS_INSTALL=
 ########################################
 # Base stage
 ########################################
-FROM docker.io/library/python:3.11-slim-bookworm as base
+FROM docker.io/library/python:3.11-slim-bookworm AS base
 
 # RUN mount cache for multi-arch: https://github.com/docker/buildx/issues/549#issuecomment-1788297892
 ARG TARGETARCH
@@ -40,12 +40,12 @@ ENV UV_TORCH_BACKEND=cu128
 ########################################
 # Build stage
 ########################################
-FROM base as prepare_build_empty
+FROM base AS prepare_build_empty
 
 # An empty directory for final stage
 RUN install -d /venv
 
-FROM base as prepare_build
+FROM base AS prepare_build
 
 # RUN mount cache for multi-arch: https://github.com/docker/buildx/issues/549#issuecomment-1788297892
 ARG TARGETARCH
@@ -76,15 +76,15 @@ RUN --mount=type=cache,id=uv-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/ro
     uv pip install -r requirements.txt clip-anytorch hf_xet
 
 # Select the build stage by the build argument
-FROM prepare_build${SKIP_REQUIREMENTS_INSTALL:+_empty} as build
+FROM prepare_build${SKIP_REQUIREMENTS_INSTALL:+_empty} AS build
 
 ########################################
 # Final stage
 ########################################
-FROM base as final
+FROM base AS final
 
-ENV NVIDIA_VISIBLE_DEVICES all
-ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
+ENV NVIDIA_VISIBLE_DEVICES=all
+ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility
 
 # Fix missing libnvinfer7
 RUN ln -s /usr/lib/x86_64-linux-gnu/libnvinfer.so /usr/lib/x86_64-linux-gnu/libnvinfer.so.7 && \
@@ -143,7 +143,7 @@ COPY --link --chown=$UID:0 --chmod=775 --from=build /venv /home/$UID/.local
 COPY --link --chown=$UID:0 --chmod=775 stable-diffusion-webui /app
 
 ENV PATH="/app:/home/$UID/.local/bin${PATH:+:${PATH}}"
-ENV PYTHONPATH="/app:/home/$UID/.local/lib/python3.11/site-packages${PYTHONPATH:+:${PYTHONPATH}}"
+ENV PYTHONPATH="/app:/home/$UID/.local/lib/python3.11/site-packages"
 ENV LD_PRELOAD=libtcmalloc.so
 
 ENV GIT_CONFIG_COUNT=1
