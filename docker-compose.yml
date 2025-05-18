@@ -20,6 +20,13 @@ services:
       # Already configured in the entrypoint and should remain unchanged!!
       # --listen --port 7860 --data-dir /data
       #
+      # Use UV for the dev branch.
+      # UV is "an extremely fast Python package and project manager, written in Rust."
+      # It can significantly accelerate the installation process.
+      # This feature was introduced in PR #16869, currently only available in the dev branch:
+      # https://github.com/AUTOMATIC1111/stable-diffusion-webui/pull/16869
+      # - --uv
+      #
       # Recommended:
       - --xformers
       - --api
