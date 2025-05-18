@@ -65,7 +65,7 @@ install_requirements
 trap handle_sigint INT
 
 echo "Starting WebUI with arguments: $*"
-python3 /app/launch.py --listen --port 7860 --data-dir /data --gradio-allowed-path "." --uv "$@" &
+python3 /app/launch.py --listen --port 7860 --data-dir /data --gradio-allowed-path "." "$@" &
 python_pid=$!
 wait $python_pid
 
