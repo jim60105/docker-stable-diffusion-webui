@@ -53,6 +53,7 @@ runs:
         password: ${{ github.token }}
 
     - name: Build and push-runtime-deps
+      id: build_push_runtime_deps
       uses: docker/build-push-action@v5
       with:
         context: .
@@ -72,7 +73,14 @@ runs:
         sbom: true
         provenance: true
 
+    - name: Attest runtime-deps image
+      uses: actions/attest-build-provenance@v2
+      with:
+        subject-name: ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui
+        subject-digest: ${{ steps.build_push_runtime_deps.outputs.digest }}
+
     - name: Build and push
+      id: build_push
       uses: docker/build-push-action@v5
       with:
         context: .
@@ -90,3 +98,9 @@ runs:
         cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache,mode=max
         sbom: true
         provenance: true
+
+    - name: Attest main image
+      uses: actions/attest-build-provenance@v2
+      with:
+        subject-name: ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui
+        subject-digest: ${{ steps.build_push.outputs.digest }}
