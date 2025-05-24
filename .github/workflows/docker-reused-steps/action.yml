@@ -4,6 +4,7 @@ description: Reusable docker workflow.
 
 inputs:
   tag:
+    description: Tag to use for Docker build and push
     required: true
 
 runs:
@@ -67,7 +68,7 @@ runs:
           RELEASE=${{ github.run_number }}
           SKIP_REQUIREMENTS_INSTALL=true
         platforms: linux/amd64
-        # Cache to regietry instead of gha to avoid the capacity limit.
+        # Cache to registry instead of gha to avoid the capacity limit.
         cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache
         cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache,mode=max
         sbom: true
@@ -93,7 +94,7 @@ runs:
           VERSION=${{ inputs.tag }}
           RELEASE=${{ github.run_number }}
         platforms: linux/amd64
-        # Cache to regietry instead of gha to avoid the capacity limit.
+        # Cache to registry instead of gha to avoid the capacity limit.
         cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache
         cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/stable-diffusion-webui:cache,mode=max
         sbom: true
