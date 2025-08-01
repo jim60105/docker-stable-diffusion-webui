@@ -6,6 +6,7 @@
         "Dockerfiles",
         "Gradio",
         "outdir",
+        "venv",
         "webui"
     ]
 }

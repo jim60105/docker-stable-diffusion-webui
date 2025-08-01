@@ -133,7 +133,6 @@ COPY --link --chown=$UID:0 --chmod=775 stable-diffusion-webui/html/licenses.html
 ENV UV_PROJECT_ENVIRONMENT=/home/$UID/.local
 ENV VIRTUAL_ENV=/home/$UID/.local
 ENV UV_NO_CACHE=1
-RUN uv venv --system-site-packages /home/$UID/.local
 
 # Copy entrypoint
 COPY --link --chown=$UID:0 --chmod=775 entrypoint.sh /entrypoint.sh
