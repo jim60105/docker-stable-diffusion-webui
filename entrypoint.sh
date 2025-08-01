@@ -30,7 +30,7 @@ data_dir_fallback() {
 install_requirements() {
     if ! pip show torch 2>/dev/null | grep -q Name; then
         echo "Installing torch and related packages... (This will only run once and might take some time)"
-        uv venv --system-site-packages /venv \
+        uv venv --system-site-packages /venv && \
         uv pip install -U \
             -r requirements_versions.txt \
             setuptools==69.5.1 \
