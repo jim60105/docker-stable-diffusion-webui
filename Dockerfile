@@ -115,7 +115,7 @@ RUN install -d -m 775 -o $UID -g 0 ${CACHE_HOME} && \
     chown -R $UID:0 /home/$UID && chmod -R g=u /home/$UID
 
 # curl for healthcheck
-COPY --link --from=ghcr.io/tarampampam/curl:8.7.1 /bin/curl /usr/local/bin/
+COPY --link --from=ghcr.io/tarampampam/curl:8.16.0 /bin/curl /usr/local/bin/
 
 # ffmpeg
 COPY --link --from=ghcr.io/jim60105/static-ffmpeg-upx:8.0 /ffmpeg /usr/local/bin/
