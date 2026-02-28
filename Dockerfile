@@ -20,6 +20,9 @@ FROM docker.io/library/python:3.11-slim-bookworm AS base
 ARG TARGETARCH
 ARG TARGETVARIANT
 
+# Change Debian mirror to Taiwan mirror
+RUN sed -i 's|deb.debian.org/debian|mirror.twds.com.tw/debian|g' /etc/apt/sources.list.d/debian.sources
+
 # Install runtime/buildtime dependencies
 RUN --mount=type=cache,id=apt-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/cache/apt \
     --mount=type=cache,id=aptlists-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/var/lib/apt/lists \
