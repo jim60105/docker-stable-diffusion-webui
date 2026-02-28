@@ -36,10 +36,8 @@ install_requirements() {
             -r requirements_versions.txt \
             setuptools==69.5.1 \
             wheel \
-            torch==2.7.0 torchvision \
-            xformers==0.0.30 \
-            numpy==1.26.2 \
-            pillow==9.5.0
+            torch==2.10.0 torchvision \
+            xformers==0.0.30
     fi
 }
 

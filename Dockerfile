@@ -14,7 +14,7 @@ ARG SKIP_REQUIREMENTS_INSTALL=
 ########################################
 # Base stage
 ########################################
-FROM docker.io/library/python:3.11-slim-bookworm AS base
+FROM docker.io/library/python:3.13-slim-bookworm AS base
 
 # RUN mount cache for multi-arch: https://github.com/docker/buildx/issues/549#issuecomment-1788297892
 ARG TARGETARCH
@@ -35,7 +35,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 ENV UV_LINK_MODE=copy
 ENV UV_PYTHON_DOWNLOADS=0
-ENV UV_TORCH_BACKEND=cu128
+ENV UV_TORCH_BACKEND=cu130
 
 ########################################
 # Build stage
@@ -65,7 +65,7 @@ RUN --mount=type=cache,id=uv-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/ro
 RUN --mount=type=cache,id=uv-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/uv \
     uv pip install \
     setuptools==69.5.1 \
-    torch==2.7.0 torchvision \
+    torch==2.10.0 torchvision \
     xformers==0.0.30
 
 # Install requirements
@@ -140,7 +140,7 @@ COPY --link --chown=$UID:0 --chmod=775 --from=build /venv /home/$UID/.local
 COPY --link --chown=$UID:0 --chmod=775 stable-diffusion-webui /app
 
 ENV PATH="/app:/home/$UID/.local/bin${PATH:+:${PATH}}"
-ENV PYTHONPATH="/app:/home/$UID/.local/lib/python3.11/site-packages"
+ENV PYTHONPATH="/app:/home/$UID/.local/lib/python3.13/site-packages"
 ENV LD_PRELOAD=libtcmalloc.so
 
 ENV GIT_CONFIG_COUNT=1
