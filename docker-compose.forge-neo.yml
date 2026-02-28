@@ -1,0 +1,53 @@
+services:
+  stable-diffusion-webui-forge:
+    extends:
+      file: docker-compose.yml
+      service: stable-diffusion-webui
+    container_name: stable-diffusion-webui-forge-neo
+    image: ghcr.io/jim60105/stable-diffusion-webui:forge-neo
+    command:
+      # https://github.com/lllyasviel/stable-diffusion-webui-forge/blob/main/modules/cmd_args.py
+      #
+      # Already configured in the entrypoint and should remain unchanged!!
+      # --listen --port 7860 --data-dir /data
+      #
+      # Recommended:
+      - --xformers
+      - --api
+      - --allow-code
+      #
+      # You may or may not need:
+      ## Enable installing/modifying extensions from the UI, please pay attention to security considerations.
+      - --enable-insecure-extension-access 
+      #
+      ## Optimizations
+      ## https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Optimizations
+      - --opt-sdp-attention
+      - --opt-sdp-no-mem-attention
+      - --opt-split-attention
+      - --opt-channelslast
+      #
+      ## Debug logging
+      # - --loglevel
+      # - DEBUG
+      # - --log-startup
+      #
+      ## Forge Backend
+      ##! Start the container once and check the logs.
+      ##! Forge will advise you on which optimization flags to add depending on your graphics card.
+      ## https://github.com/lllyasviel/stable-diffusion-webui-forge?tab=readme-ov-file#forge-backend
+      ## https://github.com/lllyasviel/stable-diffusion-webui-forge/blob/main/ldm_patched/modules/args_parser.py
+      ##
+      ### This flag will make things slower but less risky
+      # - --always-offload-from-vram
+      ### These flags will make things faster but more risky
+      # - --cuda-malloc
+      # - --cuda-stream
+      # - --pin-shared-memory
+      #
+      # Neo Backend
+      - --uv
+
+volumes:
+  cache:
+  repositories:
