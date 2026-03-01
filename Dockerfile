@@ -66,7 +66,7 @@ RUN --mount=type=cache,id=uv-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/ro
     uv pip install \
     setuptools==69.5.1 \
     torch==2.10.0 torchvision \
-    xformers==0.0.30
+    xformers==0.0.35
 
 # Install requirements
 RUN --mount=type=cache,id=uv-$TARGETARCH$TARGETVARIANT,sharing=locked,target=/root/.cache/uv \

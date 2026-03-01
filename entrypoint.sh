@@ -37,7 +37,7 @@ install_requirements() {
             setuptools==69.5.1 \
             wheel \
             torch==2.10.0 torchvision \
-            xformers==0.0.30
+            xformers==0.0.35
     fi
 }
 
