@@ -116,11 +116,11 @@ RUN install -d -m 775 -o $UID -g 0 ${CACHE_HOME} && \
 COPY --link --from=ghcr.io/tarampampam/curl:8.16.0 /bin/curl /usr/local/bin/
 
 # ffmpeg
-COPY --link --from=ghcr.io/jim60105/static-ffmpeg-upx:8.0 /ffmpeg /usr/local/bin/
-COPY --link --from=ghcr.io/jim60105/static-ffmpeg-upx:8.0 /ffprobe /usr/local/bin/
+COPY --link --from=ghcr.io/jim60105/static-ffmpeg-upx:8.0.1 /ffmpeg /usr/local/bin/
+COPY --link --from=ghcr.io/jim60105/static-ffmpeg-upx:8.0.1 /ffprobe /usr/local/bin/
 
 # dumb-init
-COPY --link --from=ghcr.io/jim60105/static-ffmpeg-upx:8.0 /dumb-init /usr/bin/
+COPY --link --from=ghcr.io/jim60105/static-ffmpeg-upx:8.0.1 /dumb-init /usr/bin/
 
 # Copy licenses (OpenShift Policy)
 COPY --link --chown=$UID:0 --chmod=775 LICENSE /licenses/Dockerfile.LICENSE
