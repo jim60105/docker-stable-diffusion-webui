@@ -5,6 +5,17 @@ services:
       service: stable-diffusion-webui
     container_name: stable-diffusion-webui-forge-neo
     image: ghcr.io/jim60105/stable-diffusion-webui:forge-neo
+    # build:
+    #   context: .
+    #   dockerfile: forge-neo.Dockerfile
+    #   target: final
+    #   args:
+    #     - UID=1001
+    #     - SKIP_REQUIREMENTS_INSTALL=true
+    #   cache_from:
+    #     - ghcr.io/jim60105/stable-diffusion-webui:cache
+    #   cache_to:
+    #     - type=inline
     command:
       # https://github.com/lllyasviel/stable-diffusion-webui-forge/blob/main/modules/cmd_args.py
       #

@@ -33,13 +33,11 @@ install_requirements() {
     if ! pip show torch 2>/dev/null | grep -q Name; then
         echo "Installing torch and related packages... (This will only run once and might take some time)"
         uv pip install -U \
-            -r requirements_versions.txt \
+            -r requirements.txt \
             setuptools==69.5.1 \
             wheel \
-            torch==2.7.0 torchvision \
-            xformers==0.0.30 \
-            numpy==1.26.2 \
-            pillow==9.5.0
+            torch==2.10.0 torchvision \
+            xformers==0.0.35
     fi
 }
 

@@ -112,3 +112,4 @@ jobs:
         uses: ./.github/workflows/docker-reused-steps
         with:
           tag: forge-neo
+          dockerfile: ./forge-neo.Dockerfile

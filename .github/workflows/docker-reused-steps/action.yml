@@ -6,6 +6,10 @@ inputs:
   tag:
     description: Tag to use for Docker build and push
     required: true
+  dockerfile:
+    description: Path to the Dockerfile to use for building the image
+    required: false
+    default: ./Dockerfile
 
 runs:
   using: composite
@@ -70,7 +74,7 @@ runs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./Dockerfile
+        file: ${{ inputs.dockerfile }}
         push: true
         target: final
         tags: ${{ steps.meta-runtime-deps.outputs.tags }}
@@ -97,7 +101,7 @@ runs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./Dockerfile
+        file: ${{ inputs.dockerfile }}
         push: true
         target: final
         tags: ${{ steps.meta.outputs.tags }}
