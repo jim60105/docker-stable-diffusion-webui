@@ -68,7 +68,7 @@ jobs:
   docker-forge:
     runs-on: ubuntu-latest
     if: (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master'))
-    # Runs one by one to reuse the docker layer cache
+    # Runs docker-dev first to reuse the docker layer cache
     needs: docker-dev
 
     steps:
@@ -88,3 +88,27 @@ jobs:
         uses: ./.github/workflows/docker-reused-steps
         with:
           tag: forge
+
+  docker-forge-neo:
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master'))
+    # Runs docker-dev first to reuse the docker layer cache
+    needs: docker-dev
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Checkout submodule
+        run: |
+          cd stable-diffusion-webui && \
+          git remote add forge-neo https://github.com/Haoming02/sd-webui-forge-classic && \
+          git fetch forge-neo +refs/heads/*:refs/remotes/forge-neo/* -v && \
+          git checkout -b neo forge-neo/neo;
+
+      - name: Build docker
+        uses: ./.github/workflows/docker-reused-steps
+        with:
+          tag: forge-neo

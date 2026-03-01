@@ -107,6 +107,20 @@ You can use it with the `docker-compose.forge.yml` file.
 docker compose -f docker-compose.forge.yml up -d
 ```
 
+### Use the forge-neo version
+
+There's another special version `forge-neo` which is based on the `neo` branch of [Haoming02/sd-webui-forge-classic](https://github.com/Haoming02/sd-webui-forge-classic). This is a separate project derived from forge. The `forge-neo` image rebuilds weekly to keep up with the latest changes.
+
+| Image tag | Code version                                                                                                              |
+|-----------|---------------------------------------------------------------------------------------------------------------------------|
+| forge-neo | [Haoming02/sd-webui-forge-classic neo branch](https://github.com/Haoming02/sd-webui-forge-classic/tree/neo)               |
+
+You can use it with the `docker-compose.forge-neo.yml` file.
+
+```bash
+docker compose -f docker-compose.forge-neo.yml up -d
+```
+
 > [!NOTE]  
 > Notice that they used the same port `7860`, so you can't run them at the same time.  
 > Please stop the running service before starting another one.  
@@ -117,7 +131,7 @@ docker compose -f docker-compose.forge.yml up -d
 > [!NOTE]  
 > You can build it locally with Docker build arguments: `SKIP_REQUIREMENTS_INSTALL=true`
 
-Some recent versions have `runtime-deps` images that you can use, like `v1.8.0-runtime-deps`, `v1.9.4-runtime-deps`, and `forge-runtime-deps`.
+Some recent versions have `runtime-deps` images that you can use, like `v1.8.0-runtime-deps`, `v1.9.4-runtime-deps`, `forge-runtime-deps`, and `forge-neo-runtime-deps`.
 
 These images does not include pre-installed pip requirements.  
 Instead, the requirements will be installed during the image first launch.

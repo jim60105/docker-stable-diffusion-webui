@@ -107,6 +107,20 @@ docker compose down && docker compose up -d
 docker compose -f docker-compose.forge.yml up -d
 ```
 
+### 使用 forge-neo 版本
+
+另一個特殊版本 `forge-neo`，它是基於 [Haoming02/sd-webui-forge-classic](https://github.com/Haoming02/sd-webui-forge-classic) 的 `neo` 分支。這是一個從 forge 衍生的獨立專案。`forge-neo` 標籤每週會自動重建以跟上最新的變更。
+
+| Image tag | Code version                                                                                                              |
+|-----------|---------------------------------------------------------------------------------------------------------------------------|
+| forge-neo | [Haoming02/sd-webui-forge-classic neo branch](https://github.com/Haoming02/sd-webui-forge-classic/tree/neo)               |
+
+請透過 `docker-compose.forge-neo.yml` 使用它。
+
+```bash
+docker compose -f docker-compose.forge-neo.yml up -d
+```
+
 > [!NOTE]  
 > 請注意，由於它們使用相同的埠號 `7860`，因此不能在同一時間運行。  
 > 請先停止運行中的服務再啟動另一個服務。  
@@ -117,7 +131,7 @@ docker compose -f docker-compose.forge.yml up -d
 > [!NOTE]  
 > 你可以使用以下建置參數來建置它: `SKIP_REQUIREMENTS_INSTALL=true`
 
-在一些近期的版本會有 `runtime-deps` 映像可供選擇，例如 `v1.8.0-runtime-deps`、`v1.9.4-runtime-deps` 和 `forge-runtime-deps`。
+在一些近期的版本會有 `runtime-deps` 映像可供選擇，例如 `v1.8.0-runtime-deps`、`v1.9.4-runtime-deps`、`forge-runtime-deps` 和 `forge-neo-runtime-deps`。
 
 這些映像中不包含 pip 套件依賴，相反地，它們將在首次啟動時進行下載和安裝。
 
