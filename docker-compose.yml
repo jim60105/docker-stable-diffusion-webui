@@ -3,6 +3,8 @@ services:
     container_name: stable-diffusion-webui
     image: ghcr.io/jim60105/stable-diffusion-webui:v1.10.1-runtime-deps
     user: "1001:0"
+    logging:
+      driver: k8s-file
     # build:
     #   context: .
     #   target: final
